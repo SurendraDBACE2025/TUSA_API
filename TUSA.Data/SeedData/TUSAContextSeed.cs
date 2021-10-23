@@ -23,7 +23,7 @@ namespace TUSA.Data.SeedData
             if (role_master == null)
             {
                 int roleId = -100;
-                _tusaContext.role_master.Add(new role_master { role_id = roleId, role_name = "Administrator",created_date = DateTime.Now });
+                _tusaContext.role_master.Add(new role_master {  role_name = "Administrator",created_date = DateTime.Now });
                 //foreach (Page page in _tusaContext.Pages.ToList())
                 //{
                 //    _tusaContext.RolePrivileges.Add(new RolePrivilege { ID = 1, PageId = page.ID, RoleId = roleId, Privilege = page.Privilege, AddedAt = DateTime.Now });

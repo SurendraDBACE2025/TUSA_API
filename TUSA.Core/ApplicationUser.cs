@@ -14,33 +14,30 @@ namespace TUSA.Core
             httpContextAccessor = _httpContextAccessor;
         }
 
-        public int UserId =>int.Parse(this.GetUserId());
-        public int StaffId => this.GetStaffId();
+        public string UserId => this.GetUserId();
+        public string StaffId => this.GetStaffId();
 
         private string GetUserId()
         {
-            
-                if (this.httpContextAccessor.HttpContext != null)
-                {
-                    var identity = this.httpContextAccessor.HttpContext.User.Claims.FirstOrDefault();
-                    return this.httpContextAccessor.HttpContext
-                                      .User.Claims.FirstOrDefault(x => x.Type == "UId").Value ?? "0";
-                }
-           
-            return "0";
-        }
-
-        private int GetStaffId()
-        {
-            int Sid = 0;
             if (this.httpContextAccessor.HttpContext != null)
             {
-
-                int.TryParse(this.httpContextAccessor.HttpContext
-                                  .User.Claims.FirstOrDefault(x => x.Type == "SId").Value ??"0", out Sid);
-
+                return this.httpContextAccessor.HttpContext
+                                  .User.Claims.FirstOrDefault(x => x.Type == "UId").Value ?? "";
             }
-            return Sid;
+            return "";
+        }
+
+        private string GetStaffId()
+        {
+            Guid Sid = Guid.Empty;
+            if (this.httpContextAccessor.HttpContext != null)
+            {
+                return this.httpContextAccessor.HttpContext
+                                                  .User.Claims.FirstOrDefault(x => x.Type == "SId").Value ?? "";
+
+              
+            }
+            return "";
         }
     }
 }

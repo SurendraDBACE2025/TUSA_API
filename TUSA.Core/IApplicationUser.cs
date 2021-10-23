@@ -4,7 +4,7 @@ namespace TUSA.Core
 {
     public interface IApplicationUser
     {
-        int UserId { get; }
-        int StaffId { get; }
+        string  UserId { get; }
+        string StaffId { get; }
     }
 }

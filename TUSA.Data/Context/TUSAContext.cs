@@ -28,15 +28,24 @@ namespace TUSA.Data
         public DbSet<user_login_log> user_login_log { get; set; }
         public DbSet<user_login_fail> user_login_fail { get; set; }
 
-        public DbSet<pdc_gm_elements_master> pdc_gm_elements_master { get; set; }
-        public DbSet<pdc_gm_header> pdc_gm_header { get; set; }
-        public DbSet<pdc_gm_project_data> pdc_gm_project_data { get; set; }
-        public DbSet<pdc_gm_scopecategry> pdc_gm_scopecategry { get; set; }
+        public DbSet<pdc_element_master> pdc_element_master { get; set; }
+        public DbSet<pdc_header_data> pdc_header_data { get; set; }
+        public DbSet<pdc_project_element_data> pdc_project_element_data { get; set; }
+        public DbSet<pdc_category_master> pdc_category_master { get; set; }
+        public DbSet<pdc_platform_master> pdc_platform_master { get; set; }
+        public DbSet<pdc_platform_category_matrix> pdc_platform_category_matrix { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<pdc_element_master>().HasKey(c => new { c.element_id, c.category_id });
+            modelBuilder.Entity<pdc_header_data>().HasKey(c => new { c.header_Id, c.platform_id });
+            modelBuilder.Entity<pdc_platform_category_matrix>().HasKey(c => new { c.matrix_id, c.platform_id });
+            modelBuilder.Entity<pdc_project_element_data>(builder =>{
+                                                        builder.HasNoKey();
+                                                        builder.ToTable("pdc_project_element_data");
+                                                    });
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
@@ -65,14 +74,14 @@ namespace TUSA.Data
                 if (entity.State == EntityState.Added)
                 {
                     ((AuditEntity)entity.Entity).created_date = DateTime.Now;
-                    ((AuditEntity)entity.Entity).created_by = (_applicationUser.UserId == 0 ? 0 : _applicationUser.UserId);
+                    ((AuditEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
                 }
                 else if (entity.State == EntityState.Modified)
                 {
                     Entry((AuditEntity)entity.Entity).Property(p => p.created_date).IsModified = false;
                     Entry((AuditEntity)entity.Entity).Property(p => p.created_by).IsModified = false;
                     ((AuditEntity)entity.Entity).modified_date = DateTime.Now;
-                    ((AuditEntity)entity.Entity).modified_by = _applicationUser.UserId == 0 ?0 : _applicationUser.UserId ;
+                    ((AuditEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ?"" : _applicationUser.UserId ;
                     //if(entity.Entity.GetType().GetProperty("ModifiedDate") != null)
                     //{
                     //    ((BaseEntity)entity.Entity).ModifiedDate = DateTime.Now;

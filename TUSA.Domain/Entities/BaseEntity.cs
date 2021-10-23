@@ -7,14 +7,14 @@ namespace TUSA.Domain.Entities
 {
     public abstract class BaseEntity
     {
-       
+        public DateTime created_date { get; set; }
+        public DateTime modified_date { get; set; }
+        public string created_by { get; set; }
+        public string modified_by { get; set; }
     }
     public class AuditEntity : BaseEntity
     {
-        public DateTime created_date { get; set; }
-        public DateTime? modified_date { get; set; }
-        public int? created_by { get; set; }
-        public int? modified_by { get; set; }
+     
     }
     public class DataGroupEntity : AuditEntity
     {
