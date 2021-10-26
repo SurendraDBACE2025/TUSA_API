@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.UserMaster
+namespace TUSA.Domain.Entities
 {
-   public class group_type_master: AuditEntity
+    public class user_type_master: AuditEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int group_type_id { get; set; }
+        public int user_type_id { get; set; }
 
         [MaxLength(100)]
-        public string group_type_name { get; set; }
+        public string user_type_name { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 using TUSA.Domain.Entities.Settings;
 using TUSA.Core;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Data
@@ -34,8 +34,7 @@ namespace TUSA.Data
         public DbSet<pdc_category_master> pdc_category_master { get; set; }
         public DbSet<pdc_platform_master> pdc_platform_master { get; set; }
         public DbSet<pdc_platform_category_matrix> pdc_platform_category_matrix { get; set; }
-
-
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

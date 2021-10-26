@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.Settings
+namespace TUSA.Domain.Entities
 {
-   public class name_value_pair:BaseEntity
+   public class group_type_master: AuditEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int filed_id { get; set; }
-        [MaxLength(100)]
-        public string value { get; set; }
+        public int group_type_id { get; set; }
 
+        [MaxLength(100)]
+        public string group_type_name { get; set; }
     }
 }

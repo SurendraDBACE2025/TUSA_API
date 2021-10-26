@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities.Privileges;
-using TUSA.Domain.Entities.UserMaster;
 
 namespace TUSA.Domain.Entities.Privileges
 {

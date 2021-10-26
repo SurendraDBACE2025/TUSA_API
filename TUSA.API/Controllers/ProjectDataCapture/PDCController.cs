@@ -29,7 +29,7 @@ namespace TUSA.API.Controllers
         public IActionResult GetPDCElementsList(int category)
         {
           var list = _service.GetPDCElementsList(category);
-          return Ok(_mapper.Map<List<pdc_gm_elements_model>>(list));
+          return Ok(_mapper.Map<List<pdc_element_model>>(list));
         }
 
 
@@ -38,7 +38,7 @@ namespace TUSA.API.Controllers
         public IActionResult GetPDCScopeCategoryList()
         {
             var list = _service.GetPDScopeCategoryList();
-            return Ok(_mapper.Map<List<pdc_gm_scopecategry_model>>(list));
+            return Ok(_mapper.Map<List<pdc_category_model>>(list));
         }
 
         [Route("GetPDCHeadersList")]
@@ -46,7 +46,7 @@ namespace TUSA.API.Controllers
         public IActionResult GetPDCHeadersList()
         {
             var list = _service.GetPDCHeaderList();
-            return Ok(_mapper.Map<List<pdc_gm_header_model>>(list));
+            return Ok(_mapper.Map<List<pdc_header_model>>(list));
         }
 
         [Route("GetPDCElementsList")]

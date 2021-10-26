@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TUSA.Domain.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 using TUSA.Data;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Data.SeedData

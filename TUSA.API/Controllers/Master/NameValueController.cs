@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TUSA.Data.Paging;
-using TUSA.Domain.Entities.Settings;
-using TUSA.Service.Master;
+using TUSA.Domain.Entities;
+using TUSA.Service;
 
 namespace TUSA.API.Controllers.Master
 {
@@ -20,9 +20,9 @@ namespace TUSA.API.Controllers.Master
 
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly INameValueService _service;
+        private readonly INameValuePairService _service;
         public IConfiguration _configuration { get; }
-        public NameValueController(ILogger<AuthController> logger, IMapper mapper, INameValueService service,
+        public NameValueController(ILogger<AuthController> logger, IMapper mapper, INameValuePairService service,
             IConfiguration configuration)
         {
             _logger = logger;

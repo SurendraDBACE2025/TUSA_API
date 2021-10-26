@@ -21,7 +21,7 @@ using System.Net.Http;
 using TUSA.Domain.Entities;
 using TUSA.Core.Util;
 using TUSA.Domain.Models.Settings;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 
 namespace TUSA.API.Controllers
 {
@@ -48,7 +48,7 @@ namespace TUSA.API.Controllers
         public IActionResult Login(LoginModel login)
         {
             _logger.LogDebug("AuthController entered");
-            Domain.Entities.UserMaster.user_master entity = _service.Validate(login.Username, login.Password);
+            Domain.Entities.user_master entity = _service.Validate(login.Username, login.Password);
             if (entity != null)
             {
                 user_login_log success = new() { user_name = entity.user_name, ip_address = "123123144", loginat = DateTime.Now };
@@ -96,10 +96,10 @@ namespace TUSA.API.Controllers
                 string userName = "";
                 userName= resultToken.ReturnValue.Claims.FirstOrDefault(x => x.Type == "UId").Value??userName;
 
-                Result<Domain.Entities.UserMaster.user_master> result = _service.Refresh(userName, refreshToken);
+                Result<Domain.Entities.user_master> result = _service.Refresh(userName, refreshToken);
                 if (result.HasError)
                 {
-                    result = new Result<Domain.Entities.UserMaster.user_master>();
+                    result = new Result<Domain.Entities.user_master>();
                     result.AddMessageItem(new MessageItem(ErrMessages.Invalid_Token));
                     return BadRequest(result);
                 }

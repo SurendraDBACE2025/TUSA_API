@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.Settings
+namespace TUSA.Domain.Entities
 {
    public  class country_master:BaseEntity
     {
@@ -16,8 +16,12 @@ namespace TUSA.Domain.Entities.Settings
         public string country_code { get; set; }
         [MaxLength(50)]
         public string country_name { get; set; }
-        public string content_code { get; set; }
+        [MaxLength(3)]
+        public string hvec_flag { get; set; }
+        [MaxLength(1000)]
+        public string description { get; set; }
 
-        public content_master content { get; set; }
+
+        public continent_master continent { get; set; }
     }
 }

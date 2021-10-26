@@ -4,7 +4,7 @@ using TUSA.Domain.Entities.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Data.SeedData

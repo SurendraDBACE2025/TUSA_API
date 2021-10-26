@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUSA.Data;
-using TUSA.Domain.Entities.Settings;
+using TUSA.Domain.Entities;
 
-namespace TUSA.Service.Master
+namespace TUSA.Service
 {
-    public interface INameValueService : IBaseService<name_value_pair>
+    public interface INameValuePairService : IBaseService<name_value_pair>
     {
         IEnumerable<name_value_pair> GetList();
-        name_value_pair GetByFieldId(int id);
+        name_value_pair GetByFieldId(int fieldid);
     }
-    class NameValueService : BaseService<name_value_pair>, INameValueService
+    class NameValuePairService : BaseService<name_value_pair>, INameValuePairService
     {
-        public NameValueService(IUnitOfWork uow) : base(uow)
+        public NameValuePairService(IUnitOfWork uow) : base(uow)
         {
 
         }
@@ -25,9 +25,9 @@ namespace TUSA.Service.Master
             return _UOW.GetRepository<name_value_pair>().Get();
 
         }
-        public name_value_pair GetByFieldId(int id)
+        public name_value_pair GetByFieldId(int fieldid)
         {
-            return _UOW.GetRepository<name_value_pair>().Get(x=>x.filed_id==id).FirstOrDefault();
+            return _UOW.GetRepository<name_value_pair>().Get(x=>x.filed_master.field_id== fieldid).FirstOrDefault();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TUSA.Domain.Entities.UserMaster
+namespace TUSA.Domain.Entities
 {
     public class user_master : BaseEntity
     {

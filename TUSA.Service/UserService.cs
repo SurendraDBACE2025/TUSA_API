@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 
 namespace TUSA.Service
 {

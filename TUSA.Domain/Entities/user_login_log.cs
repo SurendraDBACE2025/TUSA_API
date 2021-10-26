@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 
 namespace TUSA.Domain.Entities
 {

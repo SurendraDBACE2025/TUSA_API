@@ -36,13 +36,13 @@ namespace TUSA.API.Controllers
         [HttpPost]
         public IActionResult Post(UserModel model)
         {
-            _service.Add(_mapper.Map<Domain.Entities.UserMaster.user_master>(model));
+            _service.Add(_mapper.Map<Domain.Entities.user_master>(model));
             return Ok();
         }
         [HttpPut]
         public IActionResult Put(UserModel model)
         {
-            _service.Update(_mapper.Map<Domain.Entities.UserMaster.user_master>(model));
+            _service.Update(_mapper.Map<Domain.Entities.user_master>(model));
             return Ok();
         }
     }

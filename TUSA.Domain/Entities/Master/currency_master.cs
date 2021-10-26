@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.Settings
+namespace TUSA.Domain.Entities
 {
     public class currency_master:BaseEntity
     {
@@ -18,8 +18,6 @@ namespace TUSA.Domain.Entities.Settings
         public string? currency_symbol { get; set; }
         [MaxLength(255)]
         public string? currency_desc { get; set; }
-
-        public string? country_code { get; set; }
-        public country_master country { get; set; }
+        public country_master? country { get; set; }
     }
 }
