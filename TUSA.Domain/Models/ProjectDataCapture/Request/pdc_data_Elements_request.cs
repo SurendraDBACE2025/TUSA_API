@@ -10,12 +10,12 @@ namespace TUSA.Domain.Models
     {
         public int headerId { get; set; }
 
-        public int platform_id { get; set; }
+        public int form_id { get; set; }
         public string currency { get; set; }
+        public string conntry { get; set; }
         public string supplier_group { get; set; }
         public int? project_year { get; set; }
         public string project_name { get; set; }
-        public string conntry { get; set; }
         public decimal? total_project_cost { get; set; }
         public decimal? year1OnmPrice { get; set; }
         public decimal? year2OnmPrice { get; set; }
@@ -26,6 +26,6 @@ namespace TUSA.Domain.Models
         public decimal? minimumPerfRation { get; set; }
         public decimal? guranteedAvailability { get; set; }
         public decimal? cod { get; set; }
-        public List<pdc_gm_projectData_Request> Elements { get; set; }
+        public List<pdc_projectData_request> Elements { get; set; }
     }
 }

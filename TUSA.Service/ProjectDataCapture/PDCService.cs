@@ -19,7 +19,7 @@ namespace TUSA.Service
         List<pdc_header_data> GetPDCHeaderList();
         pdc_dataElements_details_model GetPDCElementsListForHeader(int HeaderID);
         int SaveProjectDataHeader(pdc_data_Elements_request model);
-        void SaveProjectData(int headerId, List<pdc_gm_projectData_Request> elements);
+        void SaveProjectData(int headerId, List<pdc_projectData_request> elements);
         IEnumerable<project_master> GetProjects();
     }
     public class PDCService : BaseService<pdc_element_master>, IPDCService
@@ -157,11 +157,11 @@ namespace TUSA.Service
             return entity.header_Id;
         }
 
-        public void SaveProjectData(int headerId, List<pdc_gm_projectData_Request> elements)
+        public void SaveProjectData(int headerId, List<pdc_projectData_request> elements)
         {
             using (TransactionScope scope = new TransactionScope())
             {
-                foreach (var element in elements.Where(e => e.price != null))
+                foreach (var element in elements.Where(e => e.unitcost != null))
                 {
                     var entity = _UOW.GetRepository<pdc_project_element_data>().Get(o => o.header_id == headerId && o.matrix_id == element.matrixId).FirstOrDefault();
                     if (entity == null)
@@ -170,8 +170,8 @@ namespace TUSA.Service
                         {
                             header_id = headerId,
                             matrix_id = element.matrixId,
-                            unit_cost = element.price,
-                            scope_commmentary = element.commentary,
+                            unit_cost = element.unitcost,
+                            scope_commmentary = element.scopecommentary,
                             share_in_total = element.shareInTotal,
                             modal_type = element.modelType,
                             quantity = element.quantity,
