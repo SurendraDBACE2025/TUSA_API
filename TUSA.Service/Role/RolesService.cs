@@ -5,7 +5,6 @@ using TUSA.Core.Result;
 using TUSA.Data;
 using TUSA.Data.Paging;
 using TUSA.Domain.Entities;
-using TUSA.Domain.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 using TUSA.Domain.Entities.Privileges;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-   public class filed_master:BaseEntity
+   public class field_master:BaseEntity
     {
         [Key]
         public int field_id { get; set; }

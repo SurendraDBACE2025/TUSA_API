@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ModelsList\**" />
+    <Compile Remove="Reports\**" />
+    <EmbeddedResource Remove="ModelsList\**" />
+    <EmbeddedResource Remove="Reports\**" />
+    <None Remove="ModelsList\**" />
+    <None Remove="Reports\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.2.3" />
   </ItemGroup>
 
@@ -13,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ModelsList\" />
-    <Folder Include="Reports\" />
+    <Folder Include="Entities\Settings\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,13 +8,13 @@ namespace TUSA.Domain.Models
 {
     public class pdc_gm_projectData_Request
     {
-        public int masterId { get; set; }
+        public int matrixId { get; set; }
         public int headerId { get; set; }
         public decimal? price { get; set; }
         public decimal? shareInTotal { get; set; }
         public string commentary { get; set; }
-        public string modelOrType { get; set; }
-        public decimal? qty { get; set; }
+        public string modelType { get; set; }
+        public decimal? quantity { get; set; }
         public decimal? totalServiceHours { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.Settings
+namespace TUSA.Domain.Entities
 {
     public class project_phase_master:BaseEntity
     {

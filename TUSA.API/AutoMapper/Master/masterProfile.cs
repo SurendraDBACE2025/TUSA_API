@@ -16,7 +16,8 @@ namespace TUSA.API.AutoMapper
             CreateMap<country_master, country_model>();
             CreateMap<currency_master, currency_model>();
             CreateMap<continent_master, continent_model>();
-            CreateMap<name_value_pair, name_value_pair_model>();
+            CreateMap<name_value_pair, name_value_pair_model>()
+                 .ForMember(dest => dest.field_id, opt => opt.MapFrom(x => x.field_master.field_id));
         }
     }
 }

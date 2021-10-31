@@ -3,7 +3,6 @@ using AutoMapper;
 using TUSA.Core.Result;
 using TUSA.Data.Paging;
 using TUSA.Domain.Entities;
-using TUSA.Domain.Entities.Settings;
 using TUSA.Domain.Models;
 using TUSA.Domain.Models.Settings;
 using TUSA.Service;

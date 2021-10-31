@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities.Privileges;
-using TUSA.Domain.Entities.Settings;
-using TUSA.Domain.Models.Settings;
 
 namespace TUSA.API.AutoMapper
 {

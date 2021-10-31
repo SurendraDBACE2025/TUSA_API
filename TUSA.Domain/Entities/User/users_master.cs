@@ -1,6 +1,4 @@
-﻿
-using TUSA.Domain.Entities.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,10 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TUSA.Domain.Entities
 {
     public class user_master : BaseEntity
-    {
-        
-        [Key]
-
+    { [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [MaxLength(30)]
         public string user_name { get; set; }
@@ -26,7 +21,6 @@ namespace TUSA.Domain.Entities
 
         [MaxLength(255)]
         public string password { get; set; }
-        public int user_type_id { get; set; }
         public user_type_master user_type { get; set; }
         public DateTime last_login_time { get; set; }
         public DateTime password_changed_date { get; set; }

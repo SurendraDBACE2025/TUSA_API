@@ -6,16 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities.Settings
+namespace TUSA.Domain.Entities
 {
-   public class project_type_master:BaseEntity
+    public class business_unit_master:BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int project_type_id { get; set; }
+        public int business_unit_id { get; set; }
         [MaxLength(50)]
-        public string project_type_name { get; set; }
+        public string business_unit_name { get; set; }
         [MaxLength(1000)]
-        public string? project_type_desc { get; set; }
+        public string? business_unit_desc { get; set; }
+
     }
 }

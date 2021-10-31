@@ -105,7 +105,7 @@ namespace TUSA.Service
         }
         public void Revoke(int id)
         {
-            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_type_id == id);
+            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_name == "");
             entity.refresh_token = null;
             base.Update(entity);
         }

@@ -22,7 +22,7 @@ namespace TUSA.API.Controllers.Master
             _mapper = mapper;
             _service = service;
         }
-        [HttpGet]
+        [HttpGet("GetValues")]
         public IActionResult GetValuePairList()
         {
             var list = _service.GetList();
@@ -34,6 +34,12 @@ namespace TUSA.API.Controllers.Master
         public IActionResult GetValuePairDetails(int fieldId)
         {
          var list=_service.GetByFieldId(fieldId);
+            return Ok(_mapper.Map<List<name_value_pair_model>>(list));
+        }
+        [HttpGet("GetByName")]
+        public IActionResult GetValueDetails(string fieldtitle)
+        {
+            var list = _service.GetByFieldTitle(fieldtitle);
             return Ok(_mapper.Map<List<name_value_pair_model>>(list));
         }
     }

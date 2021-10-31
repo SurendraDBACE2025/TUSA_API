@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,14 @@ namespace TUSA.Service
 {
     public interface IPDCService : IBaseService<pdc_element_master>
     {
-        List<pdc_element_master> GetPDCElementsList(int category);
+        List<pdc_element_master> GetPDCElementsList(int categoryId);
+        List<pdc_element_master> GetPDCElementsByform(int formId);
         List<pdc_category_master> GetPDScopeCategoryList();
         List<pdc_header_data> GetPDCHeaderList();
         pdc_dataElements_details_model GetPDCElementsListForHeader(int HeaderID);
         int SaveProjectDataHeader(pdc_data_Elements_request model);
         void SaveProjectData(int headerId, List<pdc_gm_projectData_Request> elements);
+        IEnumerable<project_master> GetProjects();
     }
     public class PDCService : BaseService<pdc_element_master>, IPDCService
     {
@@ -25,10 +28,22 @@ namespace TUSA.Service
         {
 
         }
-
-        public List<pdc_element_master> GetPDCElementsList(int category)
+        public List<pdc_element_master> GetPDCElementsByform(int formId)
         {
-            return _UOW.GetRepository<pdc_element_master>().Get(x=>x.is_active == true).OrderBy(o => o.category_id).ToList();
+            List<pdc_element_master> eleList = new List<pdc_element_master>();
+            List<pdc_form_category_matrix> list = _UOW.GetRepository<pdc_form_category_matrix>().Get(x => x.forms_master.form_id == formId,
+                include:x=>x.Include(x=>x.pdc_category_master)).ToList();
+            foreach (pdc_form_category_matrix item in list.OrderBy(x=>x.caotegory_order_no))
+            {
+                eleList.AddRange(_UOW.GetRepository<pdc_element_master>().Get(x => x.pdc_category_master.category_id== item.pdc_category_master.category_id && x.is_active == true,
+                include: x => x.Include(x => x.pdc_category_master)).ToList());
+            }
+            return eleList;
+        
+        }
+        public List<pdc_element_master> GetPDCElementsList(int categoryId)
+        {
+            return _UOW.GetRepository<pdc_element_master>().Get(x=>x.pdc_category_master.category_id== categoryId && x.is_active == true).OrderBy(o => o.pdc_category_master.category_id).ToList();
             
         }
         public List<pdc_category_master> GetPDScopeCategoryList()
@@ -41,6 +56,11 @@ namespace TUSA.Service
             var spList = _UOW.GetRepository<pdc_header_data>().Get().ToList();
           
             return spList;
+        }
+
+        public IEnumerable<project_master> GetProjects()
+        {
+            return _UOW.GetRepository<project_master>().Get(include: x => x.Include(x => x.country).Include(x => x.currency));
         }
         public pdc_dataElements_details_model GetPDCElementsListForHeader(int HeaderID)
         {
@@ -68,12 +88,12 @@ namespace TUSA.Service
             var categoryList = _UOW.GetRepository <pdc_category_master>().Get().ToList();
 
             List<pdc_elements_details_model> eleList = new List<pdc_elements_details_model>();
-            foreach (pdc_element_master p in elementslist.OrderBy(o => o.category_id))
+            foreach (pdc_element_master p in elementslist.OrderBy(o => o.pdc_category_master.category_id))
             {
                 pdc_elements_details_model Elemodel = new pdc_elements_details_model();
               //Check here
                 var ElemenDetails = elementsDataList.Where(o => o.header_id == p.element_id).FirstOrDefault();
-                var category = categoryList.Where(c => c.category_id == p.category_id).FirstOrDefault();
+                var category = categoryList.Where(c => c.category_id == p.pdc_category_master.category_id).FirstOrDefault();
 
                // Elemodel.MasterId = p.master;
                 Elemodel.HeaderId = HeaderID;
@@ -83,7 +103,7 @@ namespace TUSA.Service
                     Elemodel.Price = ElemenDetails.unit_cost;
                     Elemodel.Commentary = ElemenDetails.scope_commmentary;
                     Elemodel.ShareInTotal = ElemenDetails.share_in_total;
-                    Elemodel.ModelOrType = ElemenDetails.modeltype;
+                    Elemodel.ModelType = ElemenDetails.modal_type;
                     Elemodel.TotalServiceHours = ElemenDetails.total_service_hours;
                     Elemodel.Qty = ElemenDetails.quantity;
                 }
@@ -114,17 +134,17 @@ namespace TUSA.Service
                     currency = model.currency,
                     cod = model.cod,
                     guaranteed_availability = model.guranteedAvailability,
-                    guaranteed_perf_ratio = model.guranteedPerformance,
+                    guaranteed_perf_ratio = model.guranteedPerfRation,
                     installed_capacity_ac = model.installedCapicityAC,
-                    minimum_perf_ratio = model.minimumPerformance,
+                    minimum_perf_ratio = model.minimumPerfRation,
                     installed_capacity_dc = model.installedCapicityDC,
-                    project_name = model.projectName,
-                    project_year = model.projectYear,
-                    supplier_group = model.supplierGroup,
-                    total_project_cost = model.totalProjectCost,
-                    year_1_onm_price = model.year1OnMPrice,
+                    project_name = model.project_name,
+                    project_year = model.project_year,
+                    supplier_group = model.supplier_group,
+                    total_project_cost = model.total_project_cost,
+                    year_1_onm_price = model.year1OnmPrice,
                     year_1_yield = model.year1Yield,
-                    year_2_onm_price = model.year2OnMPrice
+                    year_2_onm_price = model.year2OnmPrice
                 };
                 _UOW.GetRepository<pdc_header_data>().Add(entity);
                
@@ -143,18 +163,18 @@ namespace TUSA.Service
             {
                 foreach (var element in elements.Where(e => e.price != null))
                 {
-                    var entity = _UOW.GetRepository<pdc_project_element_data>().Get(o => o.header_id == headerId && o.matrix_id == element.masterId).FirstOrDefault();
+                    var entity = _UOW.GetRepository<pdc_project_element_data>().Get(o => o.header_id == headerId && o.matrix_id == element.matrixId).FirstOrDefault();
                     if (entity == null)
                     {
                         entity = new pdc_project_element_data
                         {
                             header_id = headerId,
-                            matrix_id = element.masterId,
+                            matrix_id = element.matrixId,
                             unit_cost = element.price,
                             scope_commmentary = element.commentary,
                             share_in_total = element.shareInTotal,
-                            modeltype = element.modelOrType,
-                            quantity = element.qty,
+                            modal_type = element.modelType,
+                            quantity = element.quantity,
                             total_service_hours = element.totalServiceHours
                         };
                         _UOW.GetRepository<pdc_project_element_data>().Add(entity);

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using TUSA.Domain.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using TUSA.Domain.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 using TUSA.Data;
 using TUSA.Domain.Entities;
@@ -19,18 +18,19 @@ namespace TUSA.Data.SeedData
         public static async System.Threading.Tasks.Task SeedAsync(TUSAContext tusaContext, int? retry = 0)
         {
             _tusaContext = tusaContext;
-            role_master role_master = _tusaContext.role_master.Where(x => x.role_name == "Administrator").FirstOrDefault();
+            role_master role_master = _tusaContext.role_master.Where(x => x.role_name == "Admin").FirstOrDefault();
             if (role_master == null)
             {
                 int roleId = -100;
-                _tusaContext.role_master.Add(new role_master {  role_name = "Administrator",created_date = DateTime.Now });
+                _tusaContext.role_master.Add(new role_master {  role_name = "Admin",created_date = DateTime.Now });
                 //foreach (Page page in _tusaContext.Pages.ToList())
                 //{
                 //    _tusaContext.RolePrivileges.Add(new RolePrivilege { ID = 1, PageId = page.ID, RoleId = roleId, Privilege = page.Privilege, AddedAt = DateTime.Now });
                 //}
+                await _tusaContext.SaveChangesAsync();
             }
             else
-            {  
+            {
                 //foreach (Page page in _tusaContext.Pages.ToList())
                 //{
                 //    RolePrivilege rolePrivilege = _tusaContext.RolePrivileges.Where(x => x.RoleId == role_master.ID
@@ -40,21 +40,40 @@ namespace TUSA.Data.SeedData
                 //        _tusaContext.RolePrivileges.Add(new RolePrivilege { ID = 1, PageId = page.ID, RoleId = role_master.ID, Privilege = page.Privilege, AddedAt = DateTime.Now });
                 //    }
                 //}
+                //await _tusaContext.SaveChangesAsync();
             }
 
-            await _tusaContext.SaveChangesAsync();
+           
 
 
-            if (_tusaContext.user_master.Where(x => x.user_name == "Administrator").Count() == 0)
+            
+           if (_tusaContext.user_master.Where(x => x.user_name == "dbace@testmail.com").Count() == 0)
             {
-                role_master = _tusaContext.role_master.Single(x => x.role_name == "Administrator");
+                role_master = _tusaContext.role_master.Single(x => x.role_name == "Admin");
                 _tusaContext.user_master.Add(new user_master
-                {
-                   
-                    user_name = "Administrator",
+                {  
+                    user_name = "dbace@testmail.com",
+                    first_name="DBAce",
                     password = "$5f4dcc3b5aa765d61d8327deb882cf99"
                 });
-
+                _tusaContext.user_master.Add(new user_master
+                {
+                    user_name = "raj@testmail.com",
+                    first_name = "raj",
+                    password = "$5f4dcc3b5aa765d61d8327deb882cf99"
+                });
+                _tusaContext.user_master.Add(new user_master
+                {
+                    user_name = "hari@testmail.com",
+                    first_name = "hari",
+                    password = "$5f4dcc3b5aa765d61d8327deb882cf99"
+                });
+                _tusaContext.user_master.Add(new user_master
+                {
+                    user_name = "yash@testmail.com",
+                    first_name = "yash",
+                    password = "$5f4dcc3b5aa765d61d8327deb882cf99"
+                });
                 await _tusaContext.SaveChangesAsync();
             }
 

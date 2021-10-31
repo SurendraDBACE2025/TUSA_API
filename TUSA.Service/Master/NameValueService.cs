@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,10 @@ namespace TUSA.Service
     {
         IEnumerable<name_value_pair> GetList();
         name_value_pair GetByFieldId(int fieldid);
+        List<name_value_pair> GetByFieldTitle(string fieldTytle);
+
     }
-    class NameValuePairService : BaseService<name_value_pair>, INameValuePairService
+   public class NameValuePairService : BaseService<name_value_pair>, INameValuePairService
     {
         public NameValuePairService(IUnitOfWork uow) : base(uow)
         {
@@ -25,9 +28,15 @@ namespace TUSA.Service
             return _UOW.GetRepository<name_value_pair>().Get();
 
         }
+        public List<name_value_pair> GetByFieldTitle(string fieldTytle)
+        {
+            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field_master.field_title.ToUpper()== fieldTytle.ToUpper(),
+                include:x=>x.Include(x=>x.field_master)).ToList();
+
+        }
         public name_value_pair GetByFieldId(int fieldid)
         {
-            return _UOW.GetRepository<name_value_pair>().Get(x=>x.filed_master.field_id== fieldid).FirstOrDefault();
+            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field_master.field_id== fieldid).FirstOrDefault();
         }
     }
 }

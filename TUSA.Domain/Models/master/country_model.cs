@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Models
 {
-    public class country_model:BaseModel
+    public class country_model
     {
         public string country_code { get; set; }
         

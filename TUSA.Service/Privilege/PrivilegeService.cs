@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TUSA.Core.Result;
 using TUSA.Data;
+using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Service.Privilege

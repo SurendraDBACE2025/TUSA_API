@@ -65,7 +65,7 @@ namespace TUSA.API.Controllers.Privileges
         [HttpPost("UserGroup")]
         public IActionResult UserGroupPrivilege(UserGroupModel model)
         {
-          var result=  _service.CreteUserGroupMetrix(_mapper.Map<Domain.Entities.Privileges.user_group_metrix>(model));
+          var result=  _service.CreteUserGroupMetrix(_mapper.Map<Domain.Entities.user_group_metrix>(model));
             return Ok(_mapper.Map<Domain.Models.Privileges.UserGroupModel>(result));
         }
     }

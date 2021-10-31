@@ -26,12 +26,18 @@ namespace TUSA.API.Controllers
 
         [Route("GetPDCElements")]
         [HttpGet]
-        public IActionResult GetPDCElementsList(int category)
+        public IActionResult GetPDCElementsList(int categoryId)
         {
-          var list = _service.GetPDCElementsList(category);
+          var list = _service.GetPDCElementsList(categoryId);
           return Ok(_mapper.Map<List<pdc_element_model>>(list));
         }
-
+        [Route("GetPDCElementsByForm")]
+        [HttpGet]
+        public IActionResult GetPDCElementsByForm(int formId)
+        {
+            var list = _service.GetPDCElementsByform(formId);
+            return Ok(_mapper.Map<List<pdc_element_model>>(list));
+        }
 
         [Route("GetPDCScopeCategory")]
         [HttpGet]
@@ -68,6 +74,16 @@ namespace TUSA.API.Controllers
           
             return Ok();
         }
+
+        [Route("GetProjects")]
+        [HttpGet]
+        public IActionResult GetProjects()
+        {
+            var list = _service.GetProjects();
+            return Ok(_mapper.Map<List<project_model>>(list));
+
+        }
+
 
     }
 }

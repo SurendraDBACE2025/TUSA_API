@@ -20,7 +20,7 @@ namespace TUSA.Domain.Models
         public decimal? Price { get; set; }
         public decimal? ShareInTotal { get; set; }
         public string Commentary { get; set; }
-        public string ModelOrType { get; set; }
+        public string ModelType { get; set; }
         public decimal? Qty { get; set; }
         public decimal? TotalServiceHours { get; set; }
     }

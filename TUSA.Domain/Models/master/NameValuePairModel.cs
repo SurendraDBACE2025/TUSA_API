@@ -8,7 +8,7 @@ namespace TUSA.Domain.Models
 {
     public class name_value_pair_model:BaseModel
     {
-        public int filed_id{ get; set; }
+        public int field_id { get; set; }
         public string value { get; set; }
     }
 }

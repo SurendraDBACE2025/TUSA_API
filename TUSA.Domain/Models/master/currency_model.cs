@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Models
 {
-   public class currency_model:BaseModel
+   public class currency_model
     {
         public string currency_code { get; set; }
     

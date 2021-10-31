@@ -10,6 +10,7 @@ namespace TUSA.Domain.Models
     {
         public int element_id { get; set; }
         public Nullable<int> category_id { get; set; }
+        public string Category_name { get; set; }
         public string element_name { get; set; }
         public int element_order_no { get; set; }
         public string phase { get; set; }

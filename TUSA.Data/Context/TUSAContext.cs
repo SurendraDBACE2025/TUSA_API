@@ -3,9 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TUSA.Domain.Entities;
 using System.Linq;
 using System;
-using TUSA.Domain.Entities.Settings;
 using TUSA.Core;
-using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Data
@@ -17,42 +15,30 @@ namespace TUSA.Data
         {
             _applicationUser = applicationUser;
         }
-
-       // public DbSet<SequenceNo> SequenceNo { get; set; }
-       // public DbSet<LookUpMaster> LookUpMaster { get; set; }
-       // public DbSet<LookUpValues> LookUpValues { get; set; }
-     //   public DbSet<ValueText> ValueText { get; set; }
         public DbSet<user_master> user_master { get; set; }
-      //  public DbSet<Group> Groups { get; set; }
+        public DbSet<user_group_metrix> user_group_metrix { get; set; }
         public DbSet<role_master> role_master { get; set; }
         public DbSet<user_login_log> user_login_log { get; set; }
         public DbSet<user_login_fail> user_login_fail { get; set; }
 
-        public DbSet<pdc_element_master> pdc_element_master { get; set; }
-        public DbSet<pdc_header_data> pdc_header_data { get; set; }
-        public DbSet<pdc_project_element_data> pdc_project_element_data { get; set; }
-        public DbSet<pdc_category_master> pdc_category_master { get; set; }
-        public DbSet<pdc_platform_master> pdc_platform_master { get; set; }
-        public DbSet<pdc_platform_category_matrix> pdc_platform_category_matrix { get; set; }
-      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<pdc_element_master>().HasKey(c => new { c.element_id, c.category_id });
-            modelBuilder.Entity<pdc_header_data>().HasKey(c => new { c.header_Id, c.platform_id });
-            modelBuilder.Entity<pdc_platform_category_matrix>().HasKey(c => new { c.matrix_id, c.platform_id });
+            modelBuilder.Entity<user_group_metrix>().HasNoKey();
+            modelBuilder.Entity<form_field_matrix>().HasKey(c => new { c.module_id, c.form_name,c.field_id });
             modelBuilder.Entity<pdc_project_element_data>(builder =>{
                                                         builder.HasNoKey();
                                                         builder.ToTable("pdc_project_element_data");
                                                     });
+            modelBuilder.Entity<dynamic_form_data>().HasKey(c => new { c.module_id, c.field_id,c.Record_id });
+            modelBuilder.Entity<group_form_access_matrix>().HasKey(c => new { c.group_id, c.form_id});
+            modelBuilder.Entity<quick_access_screens>().HasNoKey();
+            modelBuilder.Entity<recently_accessed_screens>().HasNoKey();
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-            //modelBuilder.Entity<user_master>().HasIndex(u => u.Name).IsUnique();
-
-            //modelBuilder.Entity<Domain.Entities.Billing.PharmacyLine>()
-            //    .HasOne(s => s.Invoice).WithMany(g => g.Lines).HasForeignKey(s => s.InvoiceId); 
+            modelBuilder.Entity<name_value_pair>().HasNoKey(); 
 
         }
 

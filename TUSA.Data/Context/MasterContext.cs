@@ -17,5 +17,10 @@ namespace TUSA.Data
         public DbSet<currency_master> currency_master { get; set; }
         public DbSet<name_value_pair> name_value_pair { get; set; }
 
+        public DbSet<business_unit_master> business_unit_master { get; set; }
+        public DbSet<currency_conversion> currency_conversion { get; set; }
+
+        public DbSet<site_master> site_master { get; set; }
+
     }
 }

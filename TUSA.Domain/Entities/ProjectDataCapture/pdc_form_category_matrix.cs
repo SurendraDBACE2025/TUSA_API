@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-    public class pdc_platform_category_matrix : BaseEntity
+    public class pdc_form_category_matrix: BaseEntity
     {
        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int  matrix_id{get;set;}
-        [Key]
-        public int platform_id { get; set; }
-        [Key]
-        public int category_id { get; set; }
+        public forms_master forms_master { get; set; }
+        public pdc_category_master pdc_category_master { get; set; }
         public int caotegory_order_no { get; set; }
         public bool is_active { get; set; }
 
