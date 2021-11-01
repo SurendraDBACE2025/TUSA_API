@@ -11,6 +11,7 @@ namespace TUSA.Domain.Models
         public int HeaderId { get; set; }
         public string SupplierGroup { get; set; }
         public string Currency { get; set; }
+        public string Country { get; set; }
         public int? ProjectYear { get; set; }
         public string ProjectName { get; set; }
         public decimal? TotalProjectCost { get; set; }

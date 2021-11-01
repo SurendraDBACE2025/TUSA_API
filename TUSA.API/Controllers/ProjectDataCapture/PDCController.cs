@@ -70,9 +70,11 @@ namespace TUSA.API.Controllers
         {
            
             int headerId = _service.SaveProjectDataHeader(record);
-            _service.SaveProjectData(headerId, record.Elements);
-          
-            return Ok();
+            // _service.SaveProjectData(headerId, record.Elements);
+            if (headerId == 0)
+                return BadRequest();
+            else
+                return Ok(true);
         }
 
         [Route("GetProjects")]

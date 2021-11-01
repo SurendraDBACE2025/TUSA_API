@@ -13,7 +13,7 @@ namespace TUSA.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int header_Id { get; set; }
-        [Key]
+        public int forms_masterform_id { get; set; }
         public forms_master forms_master { get; set; }
         [MaxLength(100)]
         public string supplier_group{ get; set; }

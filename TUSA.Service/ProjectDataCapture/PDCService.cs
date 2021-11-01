@@ -19,7 +19,7 @@ namespace TUSA.Service
         List<pdc_header_data> GetPDCHeaderList();
         pdc_dataElements_details_model GetPDCElementsListForHeader(int HeaderID);
         int SaveProjectDataHeader(pdc_data_Elements_request model);
-        void SaveProjectData(int headerId, List<pdc_projectData_request> elements);
+        //void SaveProjectData(int headerId, List<pdc_projectData_request> elements);
         IEnumerable<project_master> GetProjects();
     }
     public class PDCService : BaseService<pdc_element_master>, IPDCService
@@ -69,6 +69,7 @@ namespace TUSA.Service
 
             pdcModelList.HeaderId = model.header_Id;
             pdcModelList.Currency = model.currency;
+            pdcModelList.Country = model.country;
             pdcModelList.COD = model.cod;
             pdcModelList.GuranteedAvailability = model.guaranteed_availability;
             pdcModelList.GuranteedPerformance = model.guaranteed_perf_ratio;
@@ -84,7 +85,7 @@ namespace TUSA.Service
             pdcModelList.Year2OnMPrice = model.year_2_onm_price;
 
             var elementslist = _UOW.GetRepository <pdc_element_master>().Get().ToList();
-            var elementsDataList = _UOW.GetRepository <pdc_project_element_data>().Get(h => h.header_id == HeaderID).ToList();
+            var elementsDataList = _UOW.GetRepository <pdc_project_element_data>().Get(h => h.header.header_Id == HeaderID).ToList();
             var categoryList = _UOW.GetRepository <pdc_category_master>().Get().ToList();
 
             List<pdc_elements_details_model> eleList = new List<pdc_elements_details_model>();
@@ -92,7 +93,7 @@ namespace TUSA.Service
             {
                 pdc_elements_details_model Elemodel = new pdc_elements_details_model();
               //Check here
-                var ElemenDetails = elementsDataList.Where(o => o.header_id == p.element_id).FirstOrDefault();
+                var ElemenDetails = elementsDataList.Where(o => o.header.header_Id == p.element_id).FirstOrDefault();
                 var category = categoryList.Where(c => c.category_id == p.pdc_category_master.category_id).FirstOrDefault();
 
                // Elemodel.MasterId = p.master;
@@ -126,64 +127,89 @@ namespace TUSA.Service
 
         public int SaveProjectDataHeader(pdc_data_Elements_request model)
         {
-            var entity = _UOW.GetRepository<pdc_header_data>().Get(o => o.header_Id == model.headerId).FirstOrDefault(); ;
-            if (entity == null)
+            var headerEntity = _UOW.GetRepository<pdc_header_data>().Get(o => o.header_Id == model.headerId && o.forms_master.form_id == model.form_id).FirstOrDefault(); ;
+            try
             {
-                entity = new pdc_header_data
-                {
-                    currency = model.currency,
-                    cod = model.cod,
-                    guaranteed_availability = model.guranteedAvailability,
-                    guaranteed_perf_ratio = model.guranteedPerfRation,
-                    installed_capacity_ac = model.installedCapicityAC,
-                    minimum_perf_ratio = model.minimumPerfRation,
-                    installed_capacity_dc = model.installedCapicityDC,
-                    project_name = model.project_name,
-                    project_year = model.project_year,
-                    supplier_group = model.supplier_group,
-                    total_project_cost = model.total_project_cost,
-                    year_1_onm_price = model.year1OnmPrice,
-                    year_1_yield = model.year1Yield,
-                    year_2_onm_price = model.year2OnmPrice
-                };
-                _UOW.GetRepository<pdc_header_data>().Add(entity);
                
-            }
-            else
-            {
-                // Update header
-            }
-
-            return entity.header_Id;
-        }
-
-        public void SaveProjectData(int headerId, List<pdc_projectData_request> elements)
-        {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                foreach (var element in elements.Where(e => e.unitcost != null))
+                if (headerEntity == null)
                 {
-                    var entity = _UOW.GetRepository<pdc_project_element_data>().Get(o => o.header_id == headerId && o.matrix_id == element.matrixId).FirstOrDefault();
-                    if (entity == null)
+                    headerEntity = new pdc_header_data
                     {
-                        entity = new pdc_project_element_data
+                        forms_masterform_id = 12,
+                        currency = model.currency,
+                        cod = model.cod,
+                        guaranteed_availability = model.guranteedAvailability,
+                        guaranteed_perf_ratio = model.guranteedPerfRation,
+                        installed_capacity_ac = model.installedCapicityAC,
+                        minimum_perf_ratio = model.minimumPerfRation,
+                        installed_capacity_dc = model.installedCapicityDC,
+                        project_name = model.project_name,
+                        project_year = model.project_year,
+                        supplier_group = model.supplier_group,
+                        total_project_cost = model.total_project_cost,
+                        year_1_onm_price = model.year1OnmPrice,
+                        year_1_yield = model.year1Yield,
+                        year_2_onm_price = model.year2OnmPrice
+                    };
+                    foreach (var element in model.Elements.Where(e => e.unitcost != null))
+                    {
+                        //   var Pdc_element = _UOW.GetRepository<pdc_element_master>().Single(x => x.element_id == element.elementid);
+                        var entity = new pdc_project_element_data
                         {
-                            header_id = headerId,
-                            matrix_id = element.matrixId,
+                            header = headerEntity,
+                            elementelement_id = element.elementid,
                             unit_cost = element.unitcost,
                             scope_commmentary = element.scopecommentary,
-                            share_in_total = element.shareInTotal,
+                            share_in_total = element.shareInTotal == null ? 0 : element.shareInTotal,
                             modal_type = element.modelType,
                             quantity = element.quantity,
-                            total_service_hours = element.totalServiceHours
+                            total_service_hours = element.totalServiceHours == null ? 0 : element.totalServiceHours,
+
                         };
                         _UOW.GetRepository<pdc_project_element_data>().Add(entity);
+
                     }
+                    _UOW.SaveChanges();
+                    //_UOW.GetRepository<pdc_header_data>().Add(entity);
+
                 }
-                _UOW.SaveChanges();
-                scope.Complete();
             }
+            catch (Exception Ex)
+            {
+                return 0;
+            }
+            return headerEntity.header_Id;
         }
+
+       // public void SaveProjectData(int headerId, List<pdc_projectData_request> elements)
+//        {
+//            using (TransactionScope scope = new TransactionScope())
+//            {
+//                foreach (var element in elements.Where(e => e.unitcost != null))
+//                {
+//                    var entity = _UOW.GetRepository<pdc_project_element_data>().Get(o => o.header.header_Id == headerId).FirstOrDefault();
+//                    if (entity == null)
+//                    {
+//                        entity = new pdc_project_element_data
+//                        {
+//                            header_id = headerId,
+//                            element_id=element.elementid,
+//                            unit_cost = element.unitcost,
+//                            scope_commmentary = element.scopecommentary,
+//                            share_in_total =0,// element.shareInTotal,
+//                            modal_type = element.modelType,
+//                            quantity = element.quantity,
+//                            total_service_hours =0,// element.totalServiceHours
+//                            created_by= "hari@testmail.com"
+
+//                        };
+//    _UOW.GetRepository<pdc_project_element_data>().Add(entity);
+//}
+//                }
+//                _UOW.SaveChanges();
+//scope.Complete();
+//            }
+//        }
 
     }
 }

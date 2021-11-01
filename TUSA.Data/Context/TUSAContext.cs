@@ -26,10 +26,10 @@ namespace TUSA.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<user_group_metrix>().HasNoKey();
             modelBuilder.Entity<form_field_matrix>().HasKey(c => new { c.module_id, c.form_name,c.field_id });
-            modelBuilder.Entity<pdc_project_element_data>(builder =>{
-                                                        builder.HasNoKey();
-                                                        builder.ToTable("pdc_project_element_data");
-                                                    });
+            //modelBuilder.Entity<pdc_project_element_data>(builder =>{
+            //                                            builder.HasNoKey();
+            //                                            builder.ToTable("pdc_project_element_data");
+            //                                        });
             modelBuilder.Entity<dynamic_form_data>().HasKey(c => new { c.module_id, c.field_id,c.Record_id });
             modelBuilder.Entity<group_form_access_matrix>().HasKey(c => new { c.group_id, c.form_id});
             modelBuilder.Entity<quick_access_screens>().HasNoKey();
@@ -51,22 +51,22 @@ namespace TUSA.Data
         private void AddTimestamps()
         {
             //https://www.koskila.net/how-to-add-creator-modified-info-to-all-of-your-ef-models-at-once-in-net-core/
-            var entities = ChangeTracker.Entries().Where(x => x.Entity is AuditEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
 
             foreach (var entity in entities)
             {
                 if (entity.State == EntityState.Added)
                 {
-                    ((AuditEntity)entity.Entity).created_date = DateTime.Now;
-                    ((AuditEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
+                    ((BaseEntity)entity.Entity).created_date = DateTime.Now;
+                    ((BaseEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
                 }
                 else if (entity.State == EntityState.Modified)
                 {
-                    Entry((AuditEntity)entity.Entity).Property(p => p.created_date).IsModified = false;
-                    Entry((AuditEntity)entity.Entity).Property(p => p.created_by).IsModified = false;
-                    ((AuditEntity)entity.Entity).modified_date = DateTime.Now;
-                    ((AuditEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ?"" : _applicationUser.UserId ;
+                    Entry((BaseEntity)entity.Entity).Property(p => p.created_date).IsModified = false;
+                    Entry((BaseEntity)entity.Entity).Property(p => p.created_by).IsModified = false;
+                    ((BaseEntity)entity.Entity).modified_date = DateTime.Now;
+                    ((BaseEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ?"" : _applicationUser.UserId ;
                     //if(entity.Entity.GetType().GetProperty("ModifiedDate") != null)
                     //{
                     //    ((BaseEntity)entity.Entity).ModifiedDate = DateTime.Now;

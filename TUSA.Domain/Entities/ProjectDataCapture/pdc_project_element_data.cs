@@ -10,8 +10,13 @@ namespace TUSA.Domain.Entities
 {
     public class pdc_project_element_data:BaseEntity
     {
-        public int matrix_id { get; set; }
-        public int header_id{ get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
+        public pdc_header_data header{ get; set; }
+
+        public int elementelement_id { get; set; }
+        public pdc_element_master element { get; set; }
         [MaxLength(200)]
         public string modal_type { get; set; }
 
