@@ -17,5 +17,6 @@ namespace TUSA.Domain.Models
         public string units { get; set; }
         public string service_or_equipment { get; set; }
         public bool is_active { get; set; }
+        public Dictionary<int,string> categotyList { get; set; }
     }
 }

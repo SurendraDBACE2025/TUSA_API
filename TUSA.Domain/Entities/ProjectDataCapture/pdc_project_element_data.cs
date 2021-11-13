@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-    public class pdc_project_element_data:BaseEntity
+    public class pdc_project_element_data: AuditEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

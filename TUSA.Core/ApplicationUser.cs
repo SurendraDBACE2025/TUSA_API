@@ -21,6 +21,9 @@ namespace TUSA.Core
         {
             if (this.httpContextAccessor.HttpContext != null)
             {
+                if (this.httpContextAccessor.HttpContext.User.Claims.FirstOrDefault() == null)
+                    return "";
+                else
                 return this.httpContextAccessor.HttpContext
                                   .User.Claims.FirstOrDefault(x => x.Type == "UId").Value ?? "";
             }

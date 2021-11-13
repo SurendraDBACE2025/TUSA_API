@@ -7,7 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Models;
+using TUSA.Domain.Models.master;
+using TUSA.Domain.Models.master.Request;
 using TUSA.Service;
+using TUSA.Service.Mail;
 
 namespace TUSA.API.Controllers.Master
 {
@@ -17,11 +20,13 @@ namespace TUSA.API.Controllers.Master
     {
         private readonly IMapper _mapper;
         private readonly ISupplierGroupService _service;
+        private readonly IMailService _mailService;
 
-        public SupplierGroupController(IMapper mapper, ISupplierGroupService service)
+        public SupplierGroupController(IMapper mapper, ISupplierGroupService service,IMailService mailService)
         {
             _mapper = mapper;
             _service = service;
+            _mailService = mailService;
         }
  
         [Route("GetSuppliers/{supplierTypeId}")]
@@ -32,5 +37,38 @@ namespace TUSA.API.Controllers.Master
             var list = _service.GetSuppliersList(supplierTypeId);
             return Ok(_mapper.Map<List<group_model>>(list));
         }
+
+        [Route("GetSuppliersByRole")]
+        [HttpGet]
+        public IActionResult GetSupplierName()
+        {
+
+            var list = _service.GetSupplier(base.UserId);
+            return Ok(_mapper.Map<List<group_model>>(list));
+        }
+        [HttpPost("GroupAdd")]
+        public IActionResult AddSupplier(group_creation_request request)
+        {
+
+            var list = _service.AddGroup(request);
+            if (list.ID == -1)
+            {
+                return Ok(false);
+
+            }
+            if (list.ID == -2)
+            {
+                return BadRequest();
+
+            }
+            else if (list.ID > 0)
+            {
+                _mailService.sendGroupFormLink(request.email_Id,request.contact_First_Name,request.organization_Name,7);
+            }
+            return Ok(true);
+        }
+
+        
+      
     }
 }

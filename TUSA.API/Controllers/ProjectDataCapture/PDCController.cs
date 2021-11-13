@@ -36,7 +36,21 @@ namespace TUSA.API.Controllers
         public IActionResult GetPDCElementsByForm(int formId)
         {
             var list = _service.GetPDCElementsByform(formId);
-            return Ok(_mapper.Map<List<pdc_element_model>>(list));
+            List<pdc_element_model> modellist = _mapper.Map<List<pdc_element_model>>(list);
+            pdc_element_category_model returnModel = new pdc_element_category_model();
+            returnModel.pdc_element_model = modellist;
+            returnModel.pdc_category_model = new List<pdc_category_model>();
+            
+            foreach (Domain.Entities.pdc_element_master item in list)
+            {
+                if(!returnModel.pdc_category_model.Any(x=>x.category_id==item.pdc_category_master.category_id))
+                    returnModel.pdc_category_model.Add(new pdc_category_model()
+                    {
+                        category_id = item.pdc_category_master.category_id,
+                        category_name = item.pdc_category_master.category_name
+                    });
+            }
+            return Ok(returnModel);
         }
 
         [Route("GetPDCScopeCategory")]

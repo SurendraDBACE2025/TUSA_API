@@ -15,6 +15,8 @@ namespace TUSA.API.AutoMapper
             CreateMap<pdc_element_master, pdc_element_model>()
                  .ForMember(dest => dest.category_id, opt => opt.MapFrom(x => x.pdc_category_master.category_id))
                  .ForMember(dest => dest.Category_name, opt => opt.MapFrom(x => x.pdc_category_master.category_name));
+
+
             CreateMap<pdc_category_master, pdc_category_model>();
             CreateMap<pdc_header_data, pdc_header_model>();
             CreateMap<project_master, project_model>();

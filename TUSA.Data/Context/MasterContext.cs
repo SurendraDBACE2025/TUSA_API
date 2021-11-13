@@ -21,6 +21,9 @@ namespace TUSA.Data
         public DbSet<currency_conversion> currency_conversion { get; set; }
 
         public DbSet<site_master> site_master { get; set; }
+        public DbSet<pending_groups> pending_groups { get; set; }
+
+        public DbSet<pending_groups_mails> pending_groups_mails { get; set; }
 
     }
 }

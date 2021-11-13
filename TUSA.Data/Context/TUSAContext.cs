@@ -51,22 +51,22 @@ namespace TUSA.Data
         private void AddTimestamps()
         {
             //https://www.koskila.net/how-to-add-creator-modified-info-to-all-of-your-ef-models-at-once-in-net-core/
-            var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entities = ChangeTracker.Entries().Where(x => x.Entity is AuditEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
 
             foreach (var entity in entities)
             {
                 if (entity.State == EntityState.Added)
                 {
-                    ((BaseEntity)entity.Entity).created_date = DateTime.Now;
-                    ((BaseEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
+                    ((AuditEntity)entity.Entity).created_date = DateTime.Now;
+                    ((AuditEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
                 }
                 else if (entity.State == EntityState.Modified)
                 {
-                    Entry((BaseEntity)entity.Entity).Property(p => p.created_date).IsModified = false;
-                    Entry((BaseEntity)entity.Entity).Property(p => p.created_by).IsModified = false;
-                    ((BaseEntity)entity.Entity).modified_date = DateTime.Now;
-                    ((BaseEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ?"" : _applicationUser.UserId ;
+                    Entry((AuditEntity)entity.Entity).Property(p => p.created_date).IsModified = false;
+                    Entry((AuditEntity)entity.Entity).Property(p => p.created_by).IsModified = false;
+                    ((AuditEntity)entity.Entity).modified_date = DateTime.Now;
+                    ((AuditEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ?"" : _applicationUser.UserId ;
                     //if(entity.Entity.GetType().GetProperty("ModifiedDate") != null)
                     //{
                     //    ((BaseEntity)entity.Entity).ModifiedDate = DateTime.Now;
