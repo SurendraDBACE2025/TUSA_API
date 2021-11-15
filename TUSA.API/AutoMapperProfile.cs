@@ -2,7 +2,7 @@
 using AutoMapper;
 using TUSA.API.Converter;
 using TUSA.Domain.Entities;
-using TUSA.Domain.Entities.UserMaster;
+using TUSA.Domain.Entities;
 using TUSA.Domain.Models;
 
 namespace TUSA.API
@@ -41,7 +41,7 @@ namespace TUSA.API
             //    .ForMember(d => d.Name, s => s.MapFrom(x => x.Name));
                 //.ForMember(d => d.Role, s => s.MapFrom(x => x.Role.Name));
 
-            CreateMap<TUSA.Domain.Models.UserModel, TUSA.Domain.Entities.UserMaster.user_master>();
+            CreateMap<TUSA.Domain.Models.UserModel, TUSA.Domain.Entities.user_master>();
 
             CreateMap<TUSA.Domain.Models.SequenceNoModel, TUSA.Domain.Entities.SequenceNo>();
             CreateMap<TUSA.Domain.Entities.SequenceNo, TUSA.Domain.Models.SequenceNoModel>();

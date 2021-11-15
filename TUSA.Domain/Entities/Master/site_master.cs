@@ -12,11 +12,13 @@ namespace TUSA.Domain.Entities
     {
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int site_id { get; set; }
         [MaxLength(50)]
         public string site_name { get; set; }
+        [MaxLength(3)]
+        public string country_code { get; set; }
         public country_master country_master { get; set; }
+
         [MaxLength(50)]
         public string? langitude { get; set; }
         [MaxLength(50)]

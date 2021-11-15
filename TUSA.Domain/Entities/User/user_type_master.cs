@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
     public class user_type_master: AuditEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int user_type_id { get; set; }
 
         [MaxLength(100)]

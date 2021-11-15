@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
     public class project_phase_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int project_phase_id { get; set; }
         [MaxLength(50)]
         public string project_phase_name { get; set; }

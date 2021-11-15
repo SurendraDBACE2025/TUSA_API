@@ -50,7 +50,7 @@ namespace TUSA.Service.Mail
             mailMessage.To.Add(toMail);
             smtpClient.Send(mailMessage);
 
-            pending_groups groups= _UOW.GetRepository<pending_groups>().Get(x => x.ID == RequestId).FirstOrDefault();
+            pending_groups groups= _UOW.GetRepository<pending_groups>().Get(x => x.pending_group_ID == RequestId).FirstOrDefault();
             pending_groups_mails mail = new pending_groups_mails();
             mail.mail_sendedat = DateTime.Now;
             mail.mail_status = true;

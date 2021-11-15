@@ -60,7 +60,7 @@ namespace TUSA.Service
 
         public IEnumerable<project_master> GetProjects()
         {
-            return _UOW.GetRepository<project_master>().Get(include: x => x.Include(x => x.country).Include(x => x.currency));
+            return _UOW.GetRepository<project_master>().Get(include: x => x.Include(x => x.country_master).Include(x => x.currency_master));
         }
         public pdc_dataElements_details_model GetPDCElementsListForHeader(int HeaderID)
         {
@@ -85,7 +85,7 @@ namespace TUSA.Service
             pdcModelList.Year2OnMPrice = model.year_2_onm_price;
 
             var elementslist = _UOW.GetRepository <pdc_element_master>().Get().ToList();
-            var elementsDataList = _UOW.GetRepository <pdc_project_element_data>().Get(h => h.header.header_Id == HeaderID).ToList();
+            var elementsDataList = _UOW.GetRepository <pdc_project_element_data>().Get(h => h.header_Id == HeaderID).ToList();
             var categoryList = _UOW.GetRepository <pdc_category_master>().Get().ToList();
 
             List<pdc_elements_details_model> eleList = new List<pdc_elements_details_model>();
@@ -93,7 +93,7 @@ namespace TUSA.Service
             {
                 pdc_elements_details_model Elemodel = new pdc_elements_details_model();
               //Check here
-                var ElemenDetails = elementsDataList.Where(o => o.header.header_Id == p.element_id).FirstOrDefault();
+                var ElemenDetails = elementsDataList.Where(o => o.header_Id == p.element_id).FirstOrDefault();
                 var category = categoryList.Where(c => c.category_id == p.pdc_category_master.category_id).FirstOrDefault();
 
                // Elemodel.MasterId = p.master;
@@ -135,7 +135,7 @@ namespace TUSA.Service
                 {
                     headerEntity = new pdc_header_data
                     {
-                        forms_masterform_id = 12,
+                        form_id = 12,
                         currency = model.currency,
                         cod = model.cod,
                         guaranteed_availability = model.guranteedAvailability,
@@ -156,7 +156,7 @@ namespace TUSA.Service
                         //   var Pdc_element = _UOW.GetRepository<pdc_element_master>().Single(x => x.element_id == element.elementid);
                         var entity = new pdc_project_element_data
                         {
-                            header = headerEntity,
+                            pdc_header_data = headerEntity,
                             elementelement_id = element.elementid,
                             unit_cost = element.unitcost,
                             scope_commmentary = element.scopecommentary,

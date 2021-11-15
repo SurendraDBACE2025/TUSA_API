@@ -9,7 +9,6 @@ namespace TUSA.Domain.Entities.Privileges
     public partial class role_master : AuditEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int role_id { get; set; }
 
         [MaxLength(50)]

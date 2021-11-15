@@ -32,7 +32,7 @@ namespace TUSA.Service
 
         public List<currency_master> GetCurrencyListByCountryCode(string countryCode)
         {
-            return _UOW.GetRepository<currency_master>().Get(x => x.country.country_code == countryCode).ToList();
+            return _UOW.GetRepository<currency_master>().Get(x => x.country_master.country_code == countryCode).ToList();
         }
     }
 }

@@ -39,12 +39,12 @@ namespace TUSA.API.Controllers.Master
         {
 
             var list = _service.UpdateGroup(request);
-            if (list.ID == -1)
+            if (list.pending_group_ID == -1)
             {
                 return BadRequest();
 
             }
-            else if (list.ID > 0)
+            else if (list.pending_group_ID > 0)
             {
                 //_mailService.sendGroupFormLink(request.email_Id,request.contact_First_Name,request.organization_Name,7);
             }

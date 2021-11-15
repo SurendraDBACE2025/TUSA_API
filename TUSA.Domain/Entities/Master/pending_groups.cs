@@ -11,8 +11,7 @@ namespace TUSA.Domain.Entities
     public class pending_groups : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int pending_group_ID { get; set; }
         public string group_Name { get; set; }
         public string organization_Name { get; set; }
         public string email_Id { get; set; }
@@ -24,8 +23,8 @@ namespace TUSA.Domain.Entities
     public class pending_groups_mails : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        public int pending_group_ID { get; set; }
         public pending_groups pending_Groups { get; set; }
         public Boolean mail_status { get; set; }
         public DateTime mail_sendedat { get; set; }

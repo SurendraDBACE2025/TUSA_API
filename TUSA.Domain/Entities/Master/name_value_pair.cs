@@ -10,6 +10,7 @@ namespace TUSA.Domain.Entities
 {
    public class name_value_pair:BaseEntity
     {
+        public int field_id { get; set; }
         public field_master field_master { get; set; }
 
         [MaxLength(100)]

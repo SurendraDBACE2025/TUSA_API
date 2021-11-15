@@ -23,12 +23,12 @@ namespace TUSA.Service
 
         public IEnumerable<recently_accessed_screens> GetRecentAccessesScreens(string LogInUser)
         {
-            return _UOW.GetRepository<recently_accessed_screens>().Get(x => x.user_master.user_name == LogInUser,
+            return _UOW.GetRepository<recently_accessed_screens>().Get(x => x.user_master.user_email_id == LogInUser,
                 include:x=>x.Include(x=>x.forms_master)).OrderBy(x => x.form_list_order);
         }
         public IEnumerable<quick_access_screens> GetQuickAccessesScreens(string LogInUser)
         {
-            return _UOW.GetRepository<quick_access_screens>().Get(x => x.user_master.user_name == LogInUser, 
+            return _UOW.GetRepository<quick_access_screens>().Get(x => x.user_master.user_email_id == LogInUser, 
                 include: x => x.Include(x => x.forms_master)).OrderBy(x => x.form_list_order);
         }
 

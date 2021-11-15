@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
    public class pdc_category_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int category_id { get; set; }
         [MaxLength(50)]
         public string category_name { get; set; }

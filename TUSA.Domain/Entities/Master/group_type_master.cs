@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
    public class group_type_master: AuditEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int group_type_id { get; set; }
 
         [MaxLength(100)]

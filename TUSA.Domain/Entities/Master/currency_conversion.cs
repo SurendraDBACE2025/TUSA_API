@@ -11,12 +11,12 @@ namespace TUSA.Domain.Entities
     public class currency_conversion:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int exchange_rate_id { get; set; }
         [MaxLength(3)]
         public string from_currency { get; set; }
         [MaxLength(3)]
         public string to_currency { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal rate { get; set; }
         [MaxLength(1)]

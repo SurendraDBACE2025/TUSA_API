@@ -11,6 +11,7 @@ namespace TUSA.Domain.Entities
     {
     [Key]
     public int form_id { get; set; }
+    public int module_id { get; set; }
     public module_master module_master { get; set; }
     [MaxLength(100)]
     public string form_name{ get; set; }

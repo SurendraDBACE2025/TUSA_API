@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
    public class project_scope_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int project_scope_id { get; set; }
         [MaxLength(50)]
         public string project_scope_name { get; set; }

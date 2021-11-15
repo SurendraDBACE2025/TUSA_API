@@ -47,30 +47,30 @@ namespace TUSA.Data.SeedData
 
 
             
-           if (_tusaContext.user_master.Where(x => x.user_name == "dbace@testmail.com").Count() == 0)
+           if (_tusaContext.user_master.Where(x => x.user_email_id == "dbace@testmail.com").Count() == 0)
             {
                 role_master = _tusaContext.role_master.Single(x => x.role_name == "Admin");
                 _tusaContext.user_master.Add(new user_master
-                {  
-                    user_name = "dbace@testmail.com",
+                {
+                    user_email_id = "dbace@testmail.com",
                     first_name="DBAce",
                     password = "$5f4dcc3b5aa765d61d8327deb882cf99"
                 });
                 _tusaContext.user_master.Add(new user_master
                 {
-                    user_name = "raj@testmail.com",
+                    user_email_id = "raj@testmail.com",
                     first_name = "raj",
                     password = "$5f4dcc3b5aa765d61d8327deb882cf99"
                 });
                 _tusaContext.user_master.Add(new user_master
                 {
-                    user_name = "hari@testmail.com",
+                    user_email_id = "hari@testmail.com",
                     first_name = "hari",
                     password = "$5f4dcc3b5aa765d61d8327deb882cf99"
                 });
                 _tusaContext.user_master.Add(new user_master
                 {
-                    user_name = "yash@testmail.com",
+                    user_email_id = "yash@testmail.com",
                     first_name = "yash",
                     password = "$5f4dcc3b5aa765d61d8327deb882cf99"
                 });

@@ -11,9 +11,8 @@ namespace TUSA.Domain.Entities
     public class pdc_header_data: AuditEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int header_Id { get; set; }
-        public int forms_masterform_id { get; set; }
+        public int form_id { get; set; }
         public forms_master forms_master { get; set; }
         [MaxLength(100)]
         public string supplier_group{ get; set; }

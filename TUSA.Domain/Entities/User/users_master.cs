@@ -6,22 +6,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TUSA.Domain.Entities
 {
     public class user_master : BaseEntity
-    { [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [MaxLength(30)]
-        public string user_name { get; set; }
+    { 
+        [Key]
+        [MaxLength(128)]
+        public string user_email_id { get; set; }
         [MaxLength(30)]
         public string first_name { get; set; }
         [MaxLength(30)]
         public string last_name { get; set; }
         [MaxLength(50)]
         public string contact_number { get; set; }
-        [MaxLength(255)]
-        public string email_address { get; set; }
 
         [MaxLength(255)]
         public string password { get; set; }
-        public user_type_master user_type { get; set; }
+        public int user_type_id { get; set; }
+        public user_type_master user_type_master { get; set; }
         public DateTime last_login_time { get; set; }
         public DateTime password_changed_date { get; set; }
         [MaxLength(255)]

@@ -51,13 +51,13 @@ namespace TUSA.API.Controllers
             Domain.Entities.user_master entity = _service.Validate(login.Username, login.Password);
             if (entity != null)
             {
-                user_login_log success = new() { user_name = entity.user_name, ip_address = "123123144", loginat = DateTime.Now };
+                user_login_log success = new() { user_email_id = entity.user_email_id, ip_address = "123123144", loginat = DateTime.Now };
                 _service.AddUserLoginLog(success);
 
                 List<Claim> claims = new()
                 {
                 
-                    new Claim("UId", entity.user_name.ToString())
+                    new Claim("UId", entity.user_email_id.ToString())
                 };
                 return Ok(new
                 {
@@ -71,7 +71,7 @@ namespace TUSA.API.Controllers
                 return Ok();
             }
             //Faile
-            user_login_fail fail = new() { user_name = login.Username, ip_address = "123123144", loginat = DateTime.Now };
+            user_login_fail fail = new() { user_email_id = login.Username, ip_address = "123123144", loginat = DateTime.Now };
             _service.AddUserLoginFail(fail);
             _logger.LogDebug("AuthController left");
             return BadRequest();

@@ -13,7 +13,9 @@ namespace TUSA.Domain.Entities
        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int  matrix_id{get;set;}
+        public int form_id { get; set; }
         public forms_master forms_master { get; set; }
+        public int category_id { get; set; }
         public pdc_category_master pdc_category_master { get; set; }
         public int caotegory_order_no { get; set; }
         public bool is_active { get; set; }

@@ -28,11 +28,11 @@ namespace TUSA.Service
         }
     public List<group_master> GetSupplier(string UserId)
     {
-            user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user.user_name == UserId,
-                include: x => x.Include(x => x.group).ThenInclude(x=>x.group_type));
-            if (ugm.group.group_type.group_type_name.ToUpper() == "SUPPLIER")
+            user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master.user_email_id == UserId,
+                include: x => x.Include(x => x.group_master).ThenInclude(x=>x.group_type));
+            if (ugm.group_master.group_type.group_type_name.ToUpper() == "SUPPLIER")
             {
-                return _UOW.GetRepository<group_master>().Get(x => x.group_id == ugm.group.group_id).ToList();
+                return _UOW.GetRepository<group_master>().Get(x => x.group_id == ugm.group_master.group_id).ToList();
             }
             else
             {
@@ -51,12 +51,11 @@ namespace TUSA.Service
             pending_groups group = new pending_groups();
             pending_groups pending_Groups = _UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_id).FirstOrDefault();
             user_master user_Master = new user_master();
-            user_Master.email_address = request.email_id;
+            user_Master.user_email_id = request.email_id;
             user_Master.contact_number = request.contact_number;
             user_Master.first_name = request.first_name;
             user_Master.last_name = request.last_name;
             user_Master.password = EncryptUtl.MD5Encrypt(request.password);
-            user_Master.user_name = request.email_id;
             _UOW.GetRepository<user_master>().Add(user_Master);
 
             group_master group_Master = new group_master();
@@ -66,13 +65,13 @@ namespace TUSA.Service
             group_Master.group_type.group_type_id = 3;
             group_Master.is_active = "Y";
             group_Master.organization_name = request.organization_name;
-            group_Master.created_by = user_Master.user_name;
+            group_Master.created_by = user_Master.user_email_id;
             _UOW.GetRepository<group_master>().Add(group_Master);
 
             user_group_metrix ugm = new user_group_metrix();
-            ugm.group = group_Master;
-            ugm.role.role_id = 1;
-            ugm.user = user_Master;
+            ugm.group_master = group_Master;
+            ugm.role_master.role_id = 1;
+            ugm.user_master = user_Master;
             _UOW.GetRepository<user_group_metrix>().Add(ugm);
 
             group.is_activated = true;
@@ -84,16 +83,16 @@ namespace TUSA.Service
         public pending_groups AddGroup(group_creation_request request)
         {
             pending_groups group = new pending_groups();
-            if (_UOW.GetRepository<user_master>().Get(x => x.user_name == request.email_Id).FirstOrDefault() != null)
+            if (_UOW.GetRepository<user_master>().Get(x => x.user_email_id == request.email_Id).FirstOrDefault() != null)
             {
-                group.ID = -1;
+                group.pending_group_ID = -1;
                 return group;
             }
             //   Mail.IMailService _mailservice=new Im
             // pending_groups group = new pending_groups();
             if (_UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_Id).FirstOrDefault() != null)
             {
-                group.ID = -1;
+                group.pending_group_ID = -1;
                 return group;
             }
             try
@@ -109,7 +108,7 @@ namespace TUSA.Service
             }
             catch (Exception Ex)
             {
-                group.ID = -2;
+                group.pending_group_ID = -2;
                 return group;
             }
             _UOW.SaveChanges();

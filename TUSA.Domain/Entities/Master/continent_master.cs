@@ -12,7 +12,6 @@ namespace TUSA.Domain.Entities
     public class continent_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [MaxLength(2)]
         public string continent_code { get; set; }
         [MaxLength(50)]

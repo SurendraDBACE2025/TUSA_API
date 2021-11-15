@@ -11,13 +11,14 @@ namespace TUSA.Domain.Entities
     public class currency_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [MaxLength(3)]
         public string currency_code { get; set; }
         [MaxLength(2)]
         public string? currency_symbol { get; set; }
         [MaxLength(255)]
         public string? currency_desc { get; set; }
-        public country_master? country { get; set; }
+        [MaxLength(3)]
+        public string country_code { get; set; }
+        public country_master? country_master { get; set; }
     }
 }

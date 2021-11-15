@@ -37,7 +37,7 @@ namespace TUSA.Service
 
         public IEnumerable<user_master> GetUsers()
         {
-            return _UOW.GetRepository<user_master>().Get(include: x => x.Include(o => o.user_type));
+            return _UOW.GetRepository<user_master>().Get(include: x => x.Include(o => o.user_type_master));
         }
         public override user_master Add(user_master item)
         {
@@ -57,7 +57,7 @@ namespace TUSA.Service
 
         public override void Update(user_master item)
         {
-            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_name == item.user_name);
+            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_email_id == item.user_email_id);
             if (entity != null)
             {
                // entity.RoleId = item.RoleId;
@@ -72,7 +72,7 @@ namespace TUSA.Service
 
         public user_master Validate(string Username, string Password)
         {
-            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_name == Username);
+            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_email_id == Username);
             if (entity == null || entity.password != EncryptUtl.MD5Encrypt(Password))
             {
                 return null;
@@ -87,7 +87,7 @@ namespace TUSA.Service
         public Result<user_master> Refresh(string id, string refreshToken)
         {
             Result<user_master> result = new Result<user_master>();
-            user_master user_master = _UOW.GetRepository<user_master>().Single(x => x.user_name == id);
+            user_master user_master = _UOW.GetRepository<user_master>().Single(x => x.user_email_id == id);
             if (user_master == null || user_master.refresh_token != refreshToken || user_master.refresh_token_expiryat <= DateTime.Now)
             {
                 result.AddMessageItem(new MessageItem(Resource.RefreshToken_Invalid));
@@ -105,7 +105,7 @@ namespace TUSA.Service
         }
         public void Revoke(int id)
         {
-            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_name == "");
+            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_email_id == "");
             entity.refresh_token = null;
             base.Update(entity);
         }
@@ -122,7 +122,7 @@ namespace TUSA.Service
 
         public user_master ChangePassword(string Username)
         {
-            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_name == Username);
+            user_master entity = _UOW.GetRepository<user_master>().Single(x => x.user_email_id == Username);
             return entity;
         }
     }

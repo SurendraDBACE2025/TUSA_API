@@ -11,7 +11,6 @@ namespace TUSA.Domain.Entities
    public  class country_master:BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [MaxLength(3)]
         public string country_code { get; set; }
         [MaxLength(50)]
@@ -20,8 +19,9 @@ namespace TUSA.Domain.Entities
         public string hvec_flag { get; set; }
         [MaxLength(1000)]
         public string description { get; set; }
+        [MaxLength(2)]
+        public string continent_code { get; set; }
 
-
-        public continent_master continent { get; set; }
+        public continent_master continent_master { get; set; }
     }
 }
