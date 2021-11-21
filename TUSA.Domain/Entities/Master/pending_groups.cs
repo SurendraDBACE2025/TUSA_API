@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-    public class pending_groups : BaseEntity
+    public class pending_groups : AuditEntity
     {
         [Key]
         public int pending_group_ID { get; set; }
@@ -20,13 +20,5 @@ namespace TUSA.Domain.Entities
         // public bool same_For_User { get; set; }
         public bool is_activated { get; set; }
     }
-    public class pending_groups_mails : BaseEntity
-    {
-        [Key]
-        public int ID { get; set; }
-        public int pending_group_ID { get; set; }
-        public pending_groups pending_Groups { get; set; }
-        public Boolean mail_status { get; set; }
-        public DateTime mail_sendedat { get; set; }
-    }
+   
 }

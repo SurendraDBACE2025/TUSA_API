@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using TUSA.Core;
 using TUSA.Domain.Entities.Privileges;
+using TUSA.Domain.Entities.User;
 
 namespace TUSA.Data
 {
@@ -17,6 +18,7 @@ namespace TUSA.Data
         }
         public DbSet<user_master> user_master { get; set; }
         public DbSet<user_group_metrix> user_group_metrix { get; set; }
+        public DbSet<pending_users> pending_users { get; set; }
         public DbSet<role_master> role_master { get; set; }
         public DbSet<user_login_log> user_login_log { get; set; }
         public DbSet<user_login_fail> user_login_fail { get; set; }
@@ -24,16 +26,13 @@ namespace TUSA.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<user_group_metrix>().HasNoKey();
-            modelBuilder.Entity<form_field_matrix>().HasKey(c => new { c.module_id, c.form_name,c.field_id });
+            modelBuilder.Entity<form_field_metrix>().HasKey(c => new { c.module_id, c.form_name,c.field_id });
             //modelBuilder.Entity<pdc_project_element_data>(builder =>{
             //                                            builder.HasNoKey();
             //                                            builder.ToTable("pdc_project_element_data");
             //                                        });
             modelBuilder.Entity<dynamic_form_data>().HasKey(c => new { c.module_id, c.field_id,c.Record_id });
-            modelBuilder.Entity<group_form_access_matrix>().HasKey(c => new { c.group_id, c.form_id});
-            modelBuilder.Entity<quick_access_screens>().HasNoKey();
-            modelBuilder.Entity<recently_accessed_screens>().HasNoKey();
+            modelBuilder.Entity<group_form_access_metrix>().HasKey(c => new { c.group_id, c.form_id});
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
@@ -60,6 +59,8 @@ namespace TUSA.Data
                 {
                     ((AuditEntity)entity.Entity).created_date = DateTime.Now;
                     ((AuditEntity)entity.Entity).created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId);
+                    ((AuditEntity)entity.Entity).modified_date = DateTime.Now;
+                    ((AuditEntity)entity.Entity).modified_by = _applicationUser.UserId == "" ? "" : _applicationUser.UserId;
                 }
                 else if (entity.State == EntityState.Modified)
                 {

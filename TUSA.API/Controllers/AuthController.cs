@@ -51,27 +51,40 @@ namespace TUSA.API.Controllers
             Domain.Entities.user_master entity = _service.Validate(login.Username, login.Password);
             if (entity != null)
             {
-                user_login_log success = new() { user_email_id = entity.user_email_id, ip_address = "123123144", loginat = DateTime.Now };
+                user_login_log success = new() {user_email_id=entity.user_master_id, ip_address = "123123144",
+                    loginat = DateTime.Now,created_date=DateTime.Now,created_by= entity.user_master_id,
+                    modified_date=DateTime.Now,modified_by= entity.user_master_id
+                };
                 _service.AddUserLoginLog(success);
-
+                group_type_master gm = _service.GetUserType(entity.user_master_id);
                 List<Claim> claims = new()
                 {
                 
-                    new Claim("UId", entity.user_email_id.ToString())
+                    new Claim("UId", entity.user_master_id.ToString()),
+                  //  new Claim("UType", ugm.group.group_type.group_type_name) 
                 };
                 return Ok(new
                 {
                     jwtToken = _tokenService.GenerateAccessToken(claims),
                     refreshToken = entity.refresh_token,
-                    status=1,
+                    status = 1,
+                    userType = gm.group_type_name
                     //roleId = entity.RoleId,
                     //name = entity.Name,
                     //type = entity.Type
-                });//Success 
+                }); ;//Success 
                 return Ok();
             }
             //Faile
-            user_login_fail fail = new() { user_email_id = login.Username, ip_address = "123123144", loginat = DateTime.Now };
+            user_login_fail fail = new() {
+                user_email_id = entity.user_master_id,
+                ip_address = "123123144",
+                loginat = DateTime.Now,
+                created_date = DateTime.Now,
+                created_by = entity.user_master_id,
+                modified_date = DateTime.Now,
+                modified_by = entity.user_master_id
+            };
             _service.AddUserLoginFail(fail);
             _logger.LogDebug("AuthController left");
             return BadRequest();

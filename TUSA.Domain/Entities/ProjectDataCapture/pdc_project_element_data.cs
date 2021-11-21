@@ -11,10 +11,10 @@ namespace TUSA.Domain.Entities
     public class pdc_project_element_data: AuditEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public int header_Id { get; set; }
-        public pdc_header_data pdc_header_data { get; set; }
-
-        public int elementelement_id { get; set; }
+        public int element_Id { get; set; }
 
         [MaxLength(200)]
         public string modal_type { get; set; }

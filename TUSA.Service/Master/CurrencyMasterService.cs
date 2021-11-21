@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,17 +23,19 @@ namespace TUSA.Service
         }
         public List<currency_master> GetCurrencyList()
         {
-            return _UOW.GetRepository<currency_master>().Get().ToList();
+            return _UOW.GetRepository<currency_master>().Get(include:x=>x.Include(x=>x.country)).ToList();
         }
 
         public List<currency_master> GetCurrencyListByCode(string currencyCode)
         {
-            return _UOW.GetRepository<currency_master>().Get(x => x.currency_code == currencyCode).ToList();
+            return _UOW.GetRepository<currency_master>().Get(x => x.currency_code == currencyCode,
+                include: x => x.Include(x => x.country)).ToList();
         }
 
         public List<currency_master> GetCurrencyListByCountryCode(string countryCode)
         {
-            return _UOW.GetRepository<currency_master>().Get(x => x.country_master.country_code == countryCode).ToList();
+            return _UOW.GetRepository<currency_master>().Get(x => x.country.country_code == countryCode,
+                include: x => x.Include(x => x.country)).ToList();
         }
     }
 }

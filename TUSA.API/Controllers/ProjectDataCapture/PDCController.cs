@@ -43,11 +43,11 @@ namespace TUSA.API.Controllers
             
             foreach (Domain.Entities.pdc_element_master item in list)
             {
-                if(!returnModel.pdc_category_model.Any(x=>x.category_id==item.pdc_category_master.category_id))
+                if(!returnModel.pdc_category_model.Any(x=>x.category_id==item.category.category_id))
                     returnModel.pdc_category_model.Add(new pdc_category_model()
                     {
-                        category_id = item.pdc_category_master.category_id,
-                        category_name = item.pdc_category_master.category_name
+                        category_id = item.category.category_id,
+                        category_name = item.category.category_name
                     });
             }
             return Ok(returnModel);
@@ -82,13 +82,7 @@ namespace TUSA.API.Controllers
         [Route("SaveUpdate")]
         public IActionResult Save(pdc_data_Elements_request record)
         {
-           
-            int headerId = _service.SaveProjectDataHeader(record);
-            // _service.SaveProjectData(headerId, record.Elements);
-            if (headerId == 0)
-                return BadRequest();
-            else
-                return Ok(true);
+                return Ok(_service.SaveProjectDataHeader(record,base.UserId));
         }
 
         [Route("GetProjects")]
@@ -96,6 +90,16 @@ namespace TUSA.API.Controllers
         public IActionResult GetProjects()
         {
             var list = _service.GetProjects();
+            return Ok(_mapper.Map<List<project_model>>(list));
+
+        }
+
+
+        [Route("GetProjectsByRole")]
+        [HttpGet]
+        public IActionResult GetProjectsByRole()
+        {
+            var list = _service.GetProjectsByRole(base.UserId);
             return Ok(_mapper.Map<List<project_model>>(list));
 
         }

@@ -12,7 +12,7 @@ namespace TUSA.Service
     public interface INameValuePairService : IBaseService<name_value_pair>
     {
         IEnumerable<name_value_pair> GetList();
-        name_value_pair GetByFieldId(int fieldid);
+        List<name_value_pair> GetByFieldId(int fieldid);
         List<name_value_pair> GetByFieldTitle(string fieldTytle);
 
     }
@@ -25,18 +25,19 @@ namespace TUSA.Service
 
         public IEnumerable<name_value_pair> GetList()
         {
-            return _UOW.GetRepository<name_value_pair>().Get();
+            return _UOW.GetRepository<name_value_pair>().Get(include:x=>x.Include(x=>x.field));
 
         }
         public List<name_value_pair> GetByFieldTitle(string fieldTytle)
         {
-            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field_master.field_title.ToUpper()== fieldTytle.ToUpper(),
-                include:x=>x.Include(x=>x.field_master)).ToList();
+            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field.field_title.ToUpper()== fieldTytle.ToUpper(),
+                include:x=>x.Include(x=>x.field)).ToList();
 
         }
-        public name_value_pair GetByFieldId(int fieldid)
+        public List<name_value_pair> GetByFieldId(int fieldid)
         {
-            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field_master.field_id== fieldid).FirstOrDefault();
+            return _UOW.GetRepository<name_value_pair>().Get(x=>x.field.field_id== fieldid,
+                include: x => x.Include(x => x.field)).ToList();
         }
     }
 }

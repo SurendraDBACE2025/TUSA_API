@@ -13,13 +13,15 @@ namespace TUSA.API.AutoMapper
         public PDCProfile()
         {
             CreateMap<pdc_element_master, pdc_element_model>()
-                 .ForMember(dest => dest.category_id, opt => opt.MapFrom(x => x.pdc_category_master.category_id))
-                 .ForMember(dest => dest.Category_name, opt => opt.MapFrom(x => x.pdc_category_master.category_name));
+                 .ForMember(dest => dest.category_id, opt => opt.MapFrom(x => x.category.category_id))
+                 .ForMember(dest => dest.Category_name, opt => opt.MapFrom(x => x.category.category_name));
 
 
             CreateMap<pdc_category_master, pdc_category_model>();
             CreateMap<pdc_header_data, pdc_header_model>();
-            CreateMap<project_master, project_model>();
+            CreateMap<project_master, project_model>()
+                .ForMember(dest => dest.country, opt => opt.MapFrom(x => x.country))
+                .ForMember(dest => dest.currency, opt => opt.MapFrom(x => x.currency));
         }
     }
 }

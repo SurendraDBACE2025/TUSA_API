@@ -16,8 +16,7 @@ namespace TUSA.Data
         public DbSet<pdc_header_data> pdc_header_data { get; set; }
         public DbSet<pdc_project_element_data> pdc_project_element_data { get; set; }
         public DbSet<pdc_category_master> pdc_category_master { get; set; }
-       // public DbSet<pdc_platform_master> pdc_platform_master { get; set; }
-        public DbSet<pdc_form_category_matrix> pdc_form_category_matrix { get; set; }
+        public DbSet<pdc_form_category_metrix> pdc_form_category_metrix { get; set; }
 
     }
 }

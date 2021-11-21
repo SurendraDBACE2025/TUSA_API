@@ -12,10 +12,8 @@ namespace TUSA.API.AutoMapper
     {
         public QuickAndRecentProfile()
         {
-            CreateMap<recently_accessed_screens, recently_accessed_screens_model>()
-                 .ForMember(dest => dest.forms_model, opt => opt.MapFrom(x => x.forms_master));
-            CreateMap<quick_access_screens, quick_access_screens_model>()
-                 .ForMember(dest => dest.forms_model, opt => opt.MapFrom(x => x.forms_master));
+         //   CreateMap<recently_accessed_screens, recently_accessed_screens_model>();
+           // CreateMap<quick_access_screens, quick_access_screens_model>();
         }
     }
 }

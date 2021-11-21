@@ -12,7 +12,5 @@ namespace TUSA.Domain.Models
         
         public string country_name { get; set; }
         public string content_code { get; set; }
-
-        public continent_model content { get; set; }
     }
 }

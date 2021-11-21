@@ -12,8 +12,8 @@ namespace TUSA.Domain.Models.master.Request
         public string group_desc { get; set; }
         public string organization_name { get; set; }
         public string email_id { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
+        public string contact_First_Name { get; set; }
+        public string contact_Last_Name { get; set; }
         public string contact_number { get; set; }
         public string password { get; set; }
     }

@@ -24,15 +24,14 @@ namespace TUSA.Service
         public List<module_master> GetModules(string userId)
         {
             List<module_master> modules = new List<module_master>();
-            user_group_metrix user_Group_Metrix = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master.user_email_id == userId,
-                 include: x => x.Include(x => x.group_master));
-            List<group_form_access_matrix> forms = _UOW.GetRepository<group_form_access_matrix>().Get(x => x.group_id == user_Group_Metrix.group_master.group_id).ToList();
-            foreach (group_form_access_matrix form in forms)
+            user_group_metrix user_Group_Metrix = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == userId);
+            List<group_form_access_metrix> forms = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == user_Group_Metrix.group_Id).ToList();
+            foreach (group_form_access_metrix form in forms)
             {
                forms_master form_master = _UOW.GetRepository<forms_master>().Single(x => x.form_id == form.form_id,
-                   include:x=>x.Include(x=>x.module_master));
-                if (modules.Count == 0 || !modules.Any(x=>x.module_name== form_master.module_master.module_name))
-                modules.Add(form_master.module_master);
+                   include:x=>x.Include(x=>x.module));
+                if (modules.Count == 0 || !modules.Any(x=>x.module_name== form_master.module.module_name))
+                modules.Add(form_master.module);
             }
             return modules;
         }

@@ -6,17 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities
+namespace TUSA.Domain.Entities.User
 {
-   public class recently_accessed_screens:BaseEntity
+    public class pending_users:AuditEntity
     {
         [Key]
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string user_master_Id { get; set; }
-        public int form_Id{ get; set; }
-        public int form_list_order { get; set; }
-
+        public int group_id { get; set; }
+        public string email_Id { get; set; }
     }
 }

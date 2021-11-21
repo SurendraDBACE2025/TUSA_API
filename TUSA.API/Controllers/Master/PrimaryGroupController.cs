@@ -28,27 +28,16 @@ namespace TUSA.API.Controllers.Master
 
 
         [HttpGet("GetPrimaryGroupDetails")]
-        public IActionResult GetGroupDetails(string email_Id)
+        public IActionResult GetGroupDetails(string email_id)
         {
 
-            return Ok(_mapper.Map<group_creation_model>(_service.GetGroupDetails(email_Id)));
+            return Ok(_mapper.Map<group_creation_model>(_service.GetGroupDetails(email_id)));
 
         }
         [HttpPost("GroupUpdate")]
         public IActionResult UpdateGroup(group_user_creation_details request)
         {
-
-            var list = _service.UpdateGroup(request);
-            if (list.pending_group_ID == -1)
-            {
-                return BadRequest();
-
-            }
-            else if (list.pending_group_ID > 0)
-            {
-                //_mailService.sendGroupFormLink(request.email_Id,request.contact_First_Name,request.organization_Name,7);
-            }
-            return Ok(true);
+            return Ok(_service.UpdateGroup(request));
         }
     }
 }

@@ -14,7 +14,6 @@ namespace TUSA.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string user_email_id { get; set; }
-        public user_master user_master { get; set; }
         public DateTime loginat { get; set; }
         public string ip_address { get; set; }
     }

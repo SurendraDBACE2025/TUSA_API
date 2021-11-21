@@ -12,9 +12,9 @@ namespace TUSA.Data
     {
         public DbSet<forms_master> forms_master { get; set; }
         public DbSet<field_master> field_master { get; set; }
-        public DbSet<form_field_matrix> form_field_matrix { get; set; }
+        public DbSet<form_field_metrix> form_field_metrix { get; set; }
         public DbSet<dynamic_form_data> dynamic_form_data { get; set; }
-        public DbSet<group_form_access_matrix> group_form_access_matrix { get; set; }
+        public DbSet<group_form_access_metrix> group_form_access_metrix { get; set; }
 
     }
 }

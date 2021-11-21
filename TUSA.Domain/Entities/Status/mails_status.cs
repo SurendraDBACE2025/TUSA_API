@@ -6,17 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Entities
+namespace TUSA.Domain.Entities.Status
 {
-   public class recently_accessed_screens:BaseEntity
+    public class mails_status : BaseEntity
     {
         [Key]
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string user_master_Id { get; set; }
-        public int form_Id{ get; set; }
-        public int form_list_order { get; set; }
-
+        public int ID { get; set; }
+        public string email_Id { get; set; }
+        public Boolean status { get; set; }
+        public DateTime sendedat { get; set; }
     }
 }

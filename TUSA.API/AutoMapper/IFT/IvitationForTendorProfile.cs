@@ -13,7 +13,7 @@ namespace TUSA.API.AutoMapper
         public IvitationForTendorProfile()
         {
             CreateMap<forms_master,forms_model>()
-                 .ForMember(dest => dest.module_id, opt => opt.MapFrom(x => x.module_master.module_id));
+                 .ForMember(dest => dest.module_id, opt => opt.MapFrom(x => x.module.module_id));
             CreateMap<forms_model,forms_master>();
         }
     }

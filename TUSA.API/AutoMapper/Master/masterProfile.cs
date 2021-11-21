@@ -14,11 +14,13 @@ namespace TUSA.API.AutoMapper
         public masterProfile()
         {
             CreateMap<group_master, group_model>();
-            CreateMap<country_master, country_model>();
-            CreateMap<currency_master, currency_model>();
+            CreateMap<country_master, country_model>()
+                 .ForMember(dest => dest.content_code, opt => opt.MapFrom(x => x.continent.continent_code));
+            CreateMap<currency_master, currency_model>()
+                 .ForMember(dest => dest.country_code, opt => opt.MapFrom(x => x.country.country_code));
             CreateMap<continent_master, continent_model>();
             CreateMap<name_value_pair, name_value_pair_model>()
-                 .ForMember(dest => dest.field_id, opt => opt.MapFrom(x => x.field_master.field_id));
+                 .ForMember(dest => dest.field_id, opt => opt.MapFrom(x => x.field.field_id));
             CreateMap<pending_groups, group_model>().ForMember(dest => dest.group_id, opt => opt.MapFrom(x => x.pending_group_ID))
                 .ForMember(dest => dest.group_name, opt => opt.MapFrom(x => x.contact_First_Name));
 

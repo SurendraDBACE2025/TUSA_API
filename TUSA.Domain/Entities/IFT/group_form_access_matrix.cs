@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-   public class group_form_access_matrix:BaseEntity
+   public class group_form_access_metrix:BaseEntity
     {
         [Key]
         public int form_id{ get; set; }

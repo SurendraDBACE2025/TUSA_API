@@ -12,8 +12,7 @@ namespace TUSA.Domain.Entities
     {
         [Key]
         public int element_id { get; set; }
-        public int category_id { get; set; }
-        public pdc_category_master pdc_category_master { get; set; }
+        public pdc_category_master category { get; set; }
         [MaxLength(100)]
         public string element_name { get; set; }
         public int element_order_no { get; set; }

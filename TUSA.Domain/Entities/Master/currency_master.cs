@@ -17,8 +17,6 @@ namespace TUSA.Domain.Entities
         public string? currency_symbol { get; set; }
         [MaxLength(255)]
         public string? currency_desc { get; set; }
-        [MaxLength(3)]
-        public string country_code { get; set; }
-        public country_master? country_master { get; set; }
+        public country_master? country { get; set; }
     }
 }

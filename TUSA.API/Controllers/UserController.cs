@@ -6,6 +6,11 @@ using TUSA.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using TUSA.Domain.Models.User;
+using TUSA.Domain;
+using TUSA.Service.Mail;
+using TUSA.Domain.Models.User.Request;
+using TUSA.Domain.Models.User.Responce;
 
 namespace TUSA.API.Controllers
 {
@@ -15,11 +20,13 @@ namespace TUSA.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserService _service;
+        private readonly IMailService _mailService;
 
-        public UserController(IMapper mapper, IUserService service)
+        public UserController(IMapper mapper, IUserService service, IMailService mailService)
         {
             _mapper = mapper;
             _service = service;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -29,10 +36,21 @@ namespace TUSA.API.Controllers
         }
 
         [HttpGet("{userName}")]
-        public IActionResult Get(string userName)
+        public IActionResult Get(string username)
         {
-            return Ok(_mapper.Map<UserModel>(_service.Get(userName)));
+            return Ok(_mapper.Map<UserModel>(_service.Get(username)));
         }
+        [HttpPost("AddPrimaryUser")]
+        public IActionResult PendingUserCreation(user_creation_request request)
+        {
+            ApiResponce responce= _service.PendingUserCreation(request);
+            
+            _mailService.sendUserFormLinkAsync(request);
+               
+            return Ok(responce);
+        }
+
+
         [HttpPost]
         public IActionResult Post(UserModel model)
         {

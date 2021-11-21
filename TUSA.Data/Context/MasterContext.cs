@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities;
+using TUSA.Domain.Entities.Status;
 
 namespace TUSA.Data
 {
@@ -23,7 +24,7 @@ namespace TUSA.Data
         public DbSet<site_master> site_master { get; set; }
         public DbSet<pending_groups> pending_groups { get; set; }
 
-        public DbSet<pending_groups_mails> pending_groups_mails { get; set; }
+        public DbSet<mails_status> mails_status { get; set; }
 
     }
 }

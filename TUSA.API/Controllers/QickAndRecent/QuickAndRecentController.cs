@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Models;
+using TUSA.Domain.Models.QuickAndRecent.Request;
 using TUSA.Service;
 
 namespace TUSA.API.Controllers
@@ -27,13 +28,18 @@ namespace TUSA.API.Controllers
         public IActionResult GetRecetScreens()
         {
             var list = _service.GetRecentAccessesScreens(base.UserId);
-            return Ok(_mapper.Map<List<recently_accessed_screens_model>>(list));
+            return Ok(_mapper.Map<List<forms_model>>(list));
         }
 
         [HttpGet("QuickAccessableScreens")]
         public IActionResult GetQuickAccessableScreens()
         {
-            return Ok(_mapper.Map<List<quick_access_screens_model>>(_service.GetQuickAccessesScreens(base.UserId)));
+            return Ok(_mapper.Map<List<forms_model>>(_service.GetQuickAccessesScreens(base.UserId)));
+        }
+        [HttpPost("QuickAccessable")]
+        public IActionResult AddQuickAccessablescreen(QuickAccessScreenAddRequest request)
+        {
+            return Ok(_service.AddQuickAccessesScreens(request,base.UserId));
         }
     }
 }

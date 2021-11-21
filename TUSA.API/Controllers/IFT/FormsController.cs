@@ -30,7 +30,7 @@ namespace TUSA.API.Controllers
         [HttpGet("GetFormsByModule")]
         public IActionResult GetFormsByModule(int moduleId)
         {
-            return Ok(_mapper.Map<List<forms_model>>(_service.GetFormsBasedoOnModule(moduleId)));
+            return Ok(_mapper.Map<List<forms_model>>(_service.GetFormsBasedoOnModule(moduleId,base.UserId)));
         }
         [HttpGet("GetFormsById")]
         public IActionResult GetFormsByForm(int formId)
@@ -40,7 +40,7 @@ namespace TUSA.API.Controllers
         [HttpGet("GetFormsByName")]
         public IActionResult GetFormsByName(string formName)
         {
-            return Ok(_mapper.Map<List<forms_model>>(_service.GetFormsWithformName(formName)));
+            return Ok(_mapper.Map<forms_model>(_service.GetFormsWithformName(formName)));
         }
     }
 }

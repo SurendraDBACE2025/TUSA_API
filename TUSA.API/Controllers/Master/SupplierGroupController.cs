@@ -49,23 +49,7 @@ namespace TUSA.API.Controllers.Master
         [HttpPost("GroupAdd")]
         public IActionResult AddSupplier(group_creation_request request)
         {
-
-            var list = _service.AddGroup(request);
-            if (list.pending_group_ID == -1)
-            {
-                return Ok(false);
-
-            }
-            if (list.pending_group_ID == -2)
-            {
-                return BadRequest();
-
-            }
-            else if (list.pending_group_ID > 0)
-            {
-                _mailService.sendGroupFormLink(request.email_Id,request.contact_First_Name,request.organization_Name,7);
-            }
-            return Ok(true);
+            return Ok(_service.AddGroup(request));
         }
 
         

@@ -15,9 +15,7 @@ namespace TUSA.Domain.Entities
         public int site_id { get; set; }
         [MaxLength(50)]
         public string site_name { get; set; }
-        [MaxLength(3)]
-        public string country_code { get; set; }
-        public country_master country_master { get; set; }
+        public country_master country { get; set; }
 
         [MaxLength(50)]
         public string? langitude { get; set; }

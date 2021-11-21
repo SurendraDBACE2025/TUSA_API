@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace TUSA.Service
         }
         public List<country_master> GetCountryList()
         {
-            return _UOW.GetRepository<country_master>().Get().ToList();
+            return _UOW.GetRepository<country_master>().Get(include:x=>x.Include(x=>x.continent)).ToList();
         }
 
         public List<country_master> GetCountryList(string countryCode)

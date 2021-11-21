@@ -19,9 +19,7 @@ namespace TUSA.Domain.Entities
         public string hvec_flag { get; set; }
         [MaxLength(1000)]
         public string description { get; set; }
-        [MaxLength(2)]
-        public string continent_code { get; set; }
 
-        public continent_master continent_master { get; set; }
+        public continent_master continent { get; set; }
     }
 }

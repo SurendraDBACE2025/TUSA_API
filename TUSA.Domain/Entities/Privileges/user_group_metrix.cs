@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,13 +8,11 @@ using TUSA.Domain.Entities.Privileges;
 
 namespace TUSA.Domain.Entities
 {
-    public class user_group_metrix : BaseEntity
+    public class user_group_metrix : AuditEntity
     {
-        public int user_email_id { get; set; }
-        public int role_id { get; set; }
-        public int group_id { get; set; }
-        public user_master user_master { get; set; }
-        public role_master role_master { get; set; }
-        public group_master group_master { get; set; }
+        [Key]
+        public string user_master_Id { get; set; }
+        public int role_Id { get; set; }
+        public int group_Id { get; set; }
     }
 }

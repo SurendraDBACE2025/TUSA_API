@@ -17,7 +17,6 @@ namespace TUSA.Domain.Entities
         [MaxLength(100)]
         public string display_name { get; set; }
         public int group_type_id { get; set; }
-        public group_type_master group_type { get; set; }
         [MaxLength(1000)]
         public string group_desc { get; set; }
         [MaxLength(1000)]

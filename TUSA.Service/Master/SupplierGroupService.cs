@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TUSA.Core.Util;
 using TUSA.Data;
+using TUSA.Domain;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Models.master.Request;
 
@@ -13,8 +14,8 @@ namespace TUSA.Service
 {
     public interface ISupplierGroupService : IBaseService<group_master>
     {
-        pending_groups AddGroup(group_creation_request request);
-        pending_groups UpdateGroup(group_user_creation_details request);
+        ApiResponce AddGroup(group_creation_request request);
+        ApiResponce UpdateGroup(group_user_creation_details request);
         List<group_master> GetSuppliersList(int groupTypeId);
 
          pending_groups GetGroupDetails(string email_id);
@@ -28,72 +29,92 @@ namespace TUSA.Service
         }
     public List<group_master> GetSupplier(string UserId)
     {
-            user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master.user_email_id == UserId,
-                include: x => x.Include(x => x.group_master).ThenInclude(x=>x.group_type));
-            if (ugm.group_master.group_type.group_type_name.ToUpper() == "SUPPLIER")
+            user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == UserId);
+            group_master group = _UOW.GetRepository<group_master>().Single(x => x.group_id == ugm.group_Id);
+            List<group_type_master> gtmList = _UOW.GetRepository<group_type_master>().Get().ToList();
+            if (gtmList.Any(x => x.group_type_id == group.group_type_id && x.group_type_name == "SUPPLIER"))
             {
-                return _UOW.GetRepository<group_master>().Get(x => x.group_id == ugm.group_master.group_id).ToList();
+                return _UOW.GetRepository<group_master>().Get(x => x.group_id == ugm.group_Id).ToList();
+            }
+            else if (gtmList.Any(x => x.group_type_id == group.group_type_id && x.group_type_name != "SUPPLIER"))
+            {
+                return _UOW.GetRepository<group_master>().Get(x => x.group_type_id == (gtmList.Single(x => x.group_type_id == group.group_type_id).group_type_id)).ToList();
             }
             else
             {
-                return _UOW.GetRepository<group_master>().Get(x => x.group_type.group_type_name.ToUpper()== "SUPPLIER").ToList();
+                return new List<group_master>();
             }
     }
     public List<group_master> GetSuppliersList(int groupTypeId)
         {
-            return _UOW.GetRepository<group_master>().Get(x=>x.group_type.group_type_id== groupTypeId).ToList();
+            return _UOW.GetRepository<group_master>().Get().ToList();
         }
         public pending_groups GetGroupDetails(string email_id)
         { return _UOW.GetRepository<pending_groups>().Single(x => x.email_Id == email_id); }
 
-        public pending_groups UpdateGroup(group_user_creation_details request)
+        public ApiResponce UpdateGroup(group_user_creation_details request)
         {
-            pending_groups group = new pending_groups();
-            pending_groups pending_Groups = _UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_id).FirstOrDefault();
-            user_master user_Master = new user_master();
-            user_Master.user_email_id = request.email_id;
-            user_Master.contact_number = request.contact_number;
-            user_Master.first_name = request.first_name;
-            user_Master.last_name = request.last_name;
-            user_Master.password = EncryptUtl.MD5Encrypt(request.password);
-            _UOW.GetRepository<user_master>().Add(user_Master);
-
-            group_master group_Master = new group_master();
-            group_Master.display_name = request.group_name;
-            group_Master.group_desc = request.group_desc;
-            group_Master.group_name = request.group_name;
-            group_Master.group_type.group_type_id = 3;
-            group_Master.is_active = "Y";
-            group_Master.organization_name = request.organization_name;
-            group_Master.created_by = user_Master.user_email_id;
-            _UOW.GetRepository<group_master>().Add(group_Master);
-
-            user_group_metrix ugm = new user_group_metrix();
-            ugm.group_master = group_Master;
-            ugm.role_master.role_id = 1;
-            ugm.user_master = user_Master;
-            _UOW.GetRepository<user_group_metrix>().Add(ugm);
-
-            group.is_activated = true;
-            _UOW.GetRepository<pending_groups>().Update(group);
-            _UOW.SaveChanges();
-
-            return group;
-        }
-        public pending_groups AddGroup(group_creation_request request)
-        {
-            pending_groups group = new pending_groups();
-            if (_UOW.GetRepository<user_master>().Get(x => x.user_email_id == request.email_Id).FirstOrDefault() != null)
+            try
             {
-                group.pending_group_ID = -1;
-                return group;
+                pending_groups group = new pending_groups();
+                pending_groups pending_Groups = _UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_id).FirstOrDefault();
+                _UOW.BeginTrans();
+                user_master user_Master = new user_master();
+                user_Master.user_master_id = request.email_id;
+                user_Master.contact_number = request.contact_number;
+                user_Master.first_name = request.contact_First_Name;
+                user_Master.last_name = request.contact_Last_Name;
+                user_Master.password = EncryptUtl.MD5Encrypt(request.password);
+                _UOW.GetRepository<user_master>().Add(user_Master);
+                _UOW.SaveChanges();
+
+                group_master group_Master = new group_master();
+                group_Master.display_name = request.group_name;
+                group_Master.group_desc = request.group_desc;
+                group_Master.group_name = request.group_name;
+                group_Master.group_type_id = 3;
+                group_Master.is_active = "1";
+                group_Master.organization_name = request.organization_name;
+                group_Master.created_by = request.email_id;
+                group_Master.is_deleted = "0";
+                _UOW.GetRepository<group_master>().Add(group_Master);
+
+                _UOW.SaveChanges();
+
+                user_group_metrix ugm = new user_group_metrix();
+                ugm.group_Id = group_Master.group_id;
+                ugm.role_Id = 1;
+                ugm.user_master_Id = request.email_id;
+                _UOW.GetRepository<user_group_metrix>().Add(ugm);
+
+                _UOW.SaveChanges();
+
+                group = pending_Groups;
+                group.is_activated = true;
+                _UOW.GetRepository<pending_groups>().Update(group);
+                _UOW.SaveChanges();
+                _UOW.CommitTrans();
+            }
+            catch (Exception Ex)
+            {
+                return new ApiResponce() { Status = false, Message = Ex.Message, ErrorType = false };
+            }
+            return new ApiResponce() { Status = true, Message = "", ErrorType = false };
+        }
+        public ApiResponce AddGroup(group_creation_request request)
+        {
+            pending_groups group = new pending_groups();
+            if (_UOW.GetRepository<user_master>().Get(x => x.user_master_id == request.email_Id).FirstOrDefault() != null)
+            {
+                return new ApiResponce() { Status = false, Message = "The email address is already registred, Please go for login page", ErrorType = true };
+
             }
             //   Mail.IMailService _mailservice=new Im
             // pending_groups group = new pending_groups();
             if (_UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_Id).FirstOrDefault() != null)
             {
-                group.pending_group_ID = -1;
-                return group;
+                return new ApiResponce() { Status = false, Message = "The email address is already registred", ErrorType = true };
+
             }
             try
             {   group.email_Id = request.email_Id;
@@ -105,14 +126,15 @@ namespace TUSA.Service
                 group.is_activated = false;
              //   group.mail_status = false;
                 _UOW.GetRepository<pending_groups>().Add(group);
+                _UOW.SaveChanges();
             }
             catch (Exception Ex)
             {
-                group.pending_group_ID = -2;
-                return group;
+                return new ApiResponce() { Status = false, Message = Ex.Message, ErrorType = false };
             }
-            _UOW.SaveChanges();
-            return group;
+           
+            return new ApiResponce() { Status = true, Message = "", ErrorType = false };
+           
 
         }
     }
