@@ -9,6 +9,7 @@ using TUSA.Data;
 using TUSA.Domain;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Entities.Privileges;
+using TUSA.Domain.Entities.QuickAndRecent;
 using TUSA.Domain.Models;
 
 namespace TUSA.Service
@@ -194,18 +195,27 @@ namespace TUSA.Service
 
                     try
                     {
-
-                        recently_accessed_screens screen = _UOW.GetRepository<recently_accessed_screens>().Get(x => x.form_Id == model.form_id && x.user_master_Id == UserId).FirstOrDefault();
+                        form_details fd=_UOW.GetRepository<form_details>().Get(x => x.form_id == model.form_id).FirstOrDefault();
+                        recently_accessed_screens screen = _UOW.GetRepository<recently_accessed_screens>().Get(x => x.form_details_id == fd.id && x.user_master_Id == UserId).FirstOrDefault();
                         if (screen == null)
                         {
                             screen = new recently_accessed_screens()
                             {
                                 user_master_Id = UserId,
-                                form_Id = model.form_id,
-                                created_date = DateTime.Now,
-                                created_by = UserId
+                                form_details_id = fd.id,
+                                last_accessed = DateTime.Now,
+                                created_by = UserId,
+                                created_date = DateTime.Now
                             };
                             _UOW.GetRepository<recently_accessed_screens>().Add(screen);
+                            _UOW.SaveChanges();
+                        }
+                        else
+                        {
+                            screen.last_accessed = DateTime.Now;
+                            screen.modified_by = UserId;
+                            screen.modified_date = DateTime.Now;
+                            _UOW.GetRepository<recently_accessed_screens>().Update(screen);
                             _UOW.SaveChanges();
                         }
                     }

@@ -76,16 +76,16 @@ namespace TUSA.API.Controllers
                 return Ok();
             }
             //Faile
-            user_login_fail fail = new() {
-                user_email_id = entity.user_master_id,
-                ip_address = "123123144",
-                loginat = DateTime.Now,
-                created_date = DateTime.Now,
-                created_by = entity.user_master_id,
-                modified_date = DateTime.Now,
-                modified_by = entity.user_master_id
-            };
-            _service.AddUserLoginFail(fail);
+            //user_login_fail fail = new() {
+            //    user_email_id = entity.user_master_id,
+            //    ip_address = "123123144",
+            //    loginat = DateTime.Now,
+            //    created_date = DateTime.Now,
+            //    created_by = entity.user_master_id,
+            //    modified_date = DateTime.Now,
+            //    modified_by = entity.user_master_id
+            //};
+            //_service.AddUserLoginFail(fail);
             _logger.LogDebug("AuthController left");
             return BadRequest();
 

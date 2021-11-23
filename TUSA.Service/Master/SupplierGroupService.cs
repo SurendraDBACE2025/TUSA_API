@@ -58,6 +58,11 @@ namespace TUSA.Service
             {
                 pending_groups group = new pending_groups();
                 pending_groups pending_Groups = _UOW.GetRepository<pending_groups>().Get(x => x.email_Id == request.email_id).FirstOrDefault();
+                user_master user = _UOW.GetRepository<user_master>().Get(x => x.user_master_id == request.email_id).FirstOrDefault();
+                if (user != null)
+                {
+                    return new ApiResponce() { Status = false, Message = "The iven email already registred, Please go for log in page", ErrorType =true };
+                }
                 _UOW.BeginTrans();
                 user_master user_Master = new user_master();
                 user_Master.user_master_id = request.email_id;

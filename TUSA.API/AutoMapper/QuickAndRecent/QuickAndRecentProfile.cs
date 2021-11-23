@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TUSA.Domain.Entities;
+using TUSA.Domain.Entities.QuickAndRecent;
 using TUSA.Domain.Models;
+using TUSA.Domain.Models.QuickAndRecent;
 
 namespace TUSA.API.AutoMapper
 {
@@ -12,7 +14,7 @@ namespace TUSA.API.AutoMapper
     {
         public QuickAndRecentProfile()
         {
-         //   CreateMap<recently_accessed_screens, recently_accessed_screens_model>();
+           CreateMap<form_details, form_details_model>();
            // CreateMap<quick_access_screens, quick_access_screens_model>();
         }
     }

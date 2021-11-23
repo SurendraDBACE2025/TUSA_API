@@ -8,7 +8,6 @@ namespace TUSA.Domain.Models.QuickAndRecent.Request
 {
     public class QuickAccessScreenAddRequest
     {
-        public int form_id { get; set; }
-        public string form_Name { get; set; }
+        public int form_details_id { get; set; }
     }
 }
