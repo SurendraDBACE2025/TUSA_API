@@ -50,15 +50,19 @@ namespace TUSA.Service
 
         public ApiResponce AddformDetails(form_details_request request, string login_user)
         {
-
-            form_details fd = _UOW.GetRepository<form_details>().Single(x => x.relavent_name == request.relavent_name && x.form_id==request.form_id);
+            forms_master master = new forms_master();
+            form_details fd = _UOW.GetRepository<form_details>().Single(x => x.form_id == request.form_id);
+            if (fd == null)
+            {
+                master = _UOW.GetRepository<forms_master>().Single(x => x.form_id == request.form_id);
+            }
             try
             {
                 if (fd == null)
                 {
                     fd = new form_details();
                     fd.form_id = request.form_id;
-                    fd.relavent_name = request.relavent_name;
+                    fd.form_name = master.form_name;
                     fd.icon = request.icon;
                     fd.link = request.link;
                     _UOW.GetRepository<form_details>().Add(fd);
@@ -80,8 +84,21 @@ namespace TUSA.Service
         {
             try
             {
-                form_details fd = _UOW.GetRepository<form_details>().Single(x => x.id==request.form_details_id);
-                if(fd==null)
+                forms_master forms_Master = new forms_master();
+                form_details fd = new form_details();
+                if (request.form_id > 0)
+                {
+                    forms_Master= _UOW.GetRepository<forms_master>().Single(x => x.form_id == request.form_id);
+                    fd = _UOW.GetRepository<form_details>().Single(x => x.form_id == request.form_id);
+                }
+                else if (!string.IsNullOrEmpty(request.form_name))
+                {
+                    fd = _UOW.GetRepository<form_details>().Single(x => x.form_name == request.form_name);
+                }
+                else
+                { return new ApiResponce() { Status = false, Message = "We are un-able to process this request, Form not exists", ErrorType = false }; }
+              
+                if(fd==null && fd==null)
                 {
                     return new ApiResponce() { Status = false, Message = "Form not exists", ErrorType = false };
                 }

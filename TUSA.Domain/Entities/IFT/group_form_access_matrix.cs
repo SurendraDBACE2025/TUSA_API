@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace TUSA.Domain.Entities
 {
-   public class group_form_access_metrix:BaseEntity
+   public class group_form_access_metrix:AuditEntity
     {
         [Key]
         public int form_id{ get; set; }
-        [Key]
         public int group_id { get; set; }
         [MaxLength(3)]
         public string is_active { get; set; }

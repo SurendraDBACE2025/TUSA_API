@@ -36,7 +36,7 @@ namespace TUSA.Service
         ApiResponce PendingUserCreation(user_creation_request request);
         ApiResponce UserCreation(user_request request);
 
-        ApiResponce GetPrimaryUser(string user_email);
+        primary_user_model GetPrimaryUser(string user_email);
     }
 
     public class UserService : BaseService<user_master>, IUserService
@@ -207,10 +207,8 @@ namespace TUSA.Service
             return new ApiResponce() { Status = true, Message = "", ErrorType = false };
         }
 
-        public ApiResponce GetPrimaryUser(string user_email)
+        public primary_user_model GetPrimaryUser(string user_email)
         {
-            try
-            {
                 primary_user_model model = new primary_user_model();
                 pending_users user = _UOW.GetRepository<pending_users>().Single(x => x.email_Id == user_email);
                 if (user != null)
@@ -220,12 +218,9 @@ namespace TUSA.Service
                     model.group_id = gm.group_id;
                     model.group_name = gm.group_name;
                 }
-            }
-            catch (Exception Ex)
-            {
-                return new ApiResponce() { Status = false, Message = Ex.Message, ErrorType = false };
-            }
-            return new ApiResponce() { Status = true, Message = "", ErrorType = false };
+                return model;
+            
+            
         }
     }
 

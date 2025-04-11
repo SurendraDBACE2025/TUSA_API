@@ -36,9 +36,13 @@ namespace TUSA.Service
             {
                 return _UOW.GetRepository<group_master>().Get(x => x.group_id == ugm.group_Id).ToList();
             }
-            else if (gtmList.Any(x => x.group_type_id == group.group_type_id && x.group_type_name != "SUPPLIER"))
+            else if (gtmList.Any(x => x.group_type_id == group.group_type_id && (x.group_type_name != "SUPPLIER")))// || x.group_type_name == "SUPPER ADMIN")))
             {
-                return _UOW.GetRepository<group_master>().Get(x => x.group_type_id == (gtmList.Single(x => x.group_type_id == group.group_type_id).group_type_id)).ToList();
+                return _UOW.GetRepository<group_master>().Get(x => x.group_type_id==3).ToList();
+            }
+            else if (gtmList.Any(x => x.group_type_id == group.group_type_id &&  x.group_type_name == "SUPPER ADMIN"))
+            {
+                return _UOW.GetRepository<group_master>().Get(x => x.group_type_id != 1).ToList();
             }
             else
             {

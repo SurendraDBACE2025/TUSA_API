@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TUSA.Domain.Models.QuickAndRecent.Request
+namespace TUSA.Domain.Models.IFT.Request
 {
-    public class QuickAccessScreenAddRequest
+    public class forms_assign_model_request
     {
         public int form_id { get; set; }
-        public string form_name { get; set; }
+
+        public int group_id { get; set; }
     }
 }

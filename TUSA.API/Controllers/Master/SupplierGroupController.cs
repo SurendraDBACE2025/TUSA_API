@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TUSA.Domain;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Models;
 using TUSA.Domain.Models.master;
@@ -49,10 +50,11 @@ namespace TUSA.API.Controllers.Master
         [HttpPost("GroupAdd")]
         public IActionResult AddSupplier(group_creation_request request)
         {
-            return Ok(_service.AddGroup(request));
+            ApiResponce responce = _service.AddGroup(request);
+            _mailService.sendGroupFormLink(request.email_Id);
+            return Ok(responce);
         }
 
-        
       
     }
 }

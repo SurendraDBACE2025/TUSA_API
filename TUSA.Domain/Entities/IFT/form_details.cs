@@ -10,7 +10,7 @@ namespace TUSA.Domain.Entities.QuickAndRecent
     {
         public int id { get; set; }
         public int form_id { get; set; }
-        public string relavent_name  { get; set; }
+        public string form_name  { get; set; }
         public string icon  { get; set; }
         public string link { get; set; }
     }

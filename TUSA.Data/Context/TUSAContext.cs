@@ -16,6 +16,7 @@ namespace TUSA.Data
         {
             _applicationUser = applicationUser;
         }
+        public System.Data.IDbConnection Connection => Database.GetDbConnection();
         public DbSet<user_master> user_master { get; set; }
         public DbSet<user_group_metrix> user_group_metrix { get; set; }
         public DbSet<pending_users> pending_users { get; set; }
@@ -32,7 +33,7 @@ namespace TUSA.Data
             //                                            builder.ToTable("pdc_project_element_data");
             //                                        });
             modelBuilder.Entity<dynamic_form_data>().HasKey(c => new { c.module_id, c.field_id,c.Record_id });
-            modelBuilder.Entity<group_form_access_metrix>().HasKey(c => new { c.group_id, c.form_id});
+          //  modelBuilder.Entity<group_form_access_metrix>().HasKey(c => new { c.group_id, c.form_id});
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;

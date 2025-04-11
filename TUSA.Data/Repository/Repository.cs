@@ -35,8 +35,8 @@ namespace TUSA.Data
 
         public void Delete(T entity)
         {
-            var existing = _dbSet.Find(entity);
-            if (existing != null) _dbSet.Remove(existing);
+          //  var existing = _dbSet.Find(entity);
+            if (entity != null) _dbSet.Remove(entity);
         }
 
 

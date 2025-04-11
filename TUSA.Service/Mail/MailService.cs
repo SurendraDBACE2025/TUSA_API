@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -14,16 +17,17 @@ namespace TUSA.Service.Mail
 {
     public interface IMailService:IBaseService<group_master>
     {
-        bool sendGroupFormLink(string toMail);
+        void sendGroupFormLink(string toMail);
         void sendUserFormLinkAsync(user_creation_request request);
     }
    public class MailService:BaseService<group_master>, IMailService
     {
-        public MailService(IUnitOfWork uow) : base(uow)
+        private IConfiguration _configuration;
+        public MailService(IUnitOfWork uow , IConfiguration Configuration) : base(uow)
         {
-           
+            _configuration = Configuration;
         }
-        public  bool sendGroupFormLink(string toMail)
+        public  async void sendGroupFormLink(string toMail)
         {
           
              //ToMail="harijonnalagadda@gmail.com";
@@ -44,24 +48,17 @@ namespace TUSA.Service.Mail
                 Body = HtmlBody,
                 IsBodyHtml = true,
             };
-            
-           // ms.Position = 0;
-            //Attachment att1 = new Attachment(ms, fileName);
-            //att1.ContentType = new System.Net.Mime.ContentType("application/vnd.ms-excel");
-            //mailMessage.Attachments.Add(att1);
-            //mailMessage.Attachments.Add(Attachment.CreateAttachmentFromString(JSonData, "application/json"));
-            //mailMessage.Attachments.Last().ContentDisposition.FileName = fileName;
+          
             mailMessage.To.Add(toMail);
-            smtpClient.Send(mailMessage);
 
-            mails_status mail = new mails_status();
-            mail.sendedat = DateTime.Now;
-            mail.status = true;
-            mail.email_Id = toMail;
-            _UOW.GetRepository<mails_status>().Update(mail);
-            _UOW.SaveChanges();
+           await smtpClient.SendMailAsync(mailMessage);
 
-            return true;
+            // updating mail status in database
+            try
+            {
+                MailUpdate(toMail);
+            }
+            catch { }
         }
         public async void sendUserFormLinkAsync(user_creation_request request)
         {
@@ -93,27 +90,43 @@ namespace TUSA.Service.Mail
                 //mailMessage.Attachments.Add(Attachment.CreateAttachmentFromString(JSonData, "application/json"));
                 //mailMessage.Attachments.Last().ContentDisposition.FileName = fileName;
                 mailMessage.To.Add(user.email_Id);
-                //using (var smtpClient = new SmtpClient("smtp.office365.com")
-                //{
-                //    Port = 587,
-                //    Credentials = new NetworkCredential("support@triptychusa.com", "Tickets42me+U"),
-                //    EnableSsl = true,
-                //};
-                //{
-                //    await smtpClient.SendMailAsync(message);
-                //}
+               
                 await smtpClient.SendMailAsync(mailMessage);
 
-                //mails_status mail = new mails_status();
-                //mail.sendedat = DateTime.Now;
-                //mail.status = true;
-                //mail.email_Id = user.email_Id;
-                //_UOW.GetRepository<mails_status>().Update(mail);
-                //_UOW.SaveChanges();
+                // updating mail status in database
+                try
+                {
+                    MailUpdate(user.email_Id);
+                }
+                catch { }
 
                 // return true;
             }
         
+        }
+
+
+        public bool MailUpdate(string mailId)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(this._configuration.GetConnectionString("TUSADB"));
+
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO mails_status (email_id,status,sendedat) VALUES (@email, @status, @sendedat)", cn))
+                {
+                    cmd.Parameters.Add("@email", SqlDbType.VarChar, 50).Value = mailId;
+                    cmd.Parameters.Add("@status", SqlDbType.Bit).Value = true;
+                    cmd.Parameters.Add("@sendedat", SqlDbType.DateTime).Value =DateTime.Now;
+                    cn.Open();
+                    cmd.ExecuteNonQuery();
+                    cn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

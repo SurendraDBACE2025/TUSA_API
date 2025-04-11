@@ -63,5 +63,10 @@ namespace TUSA.API.Controllers
             _service.Update(_mapper.Map<Domain.Entities.user_master>(model));
             return Ok();
         }
+        //[HttpGet("GetIncompleteUsers")]
+        //public IActionResult GetIncompleteUsers()
+        //{
+        //    return Ok(_mapper.Map<List<form_details_model>>(_service.GetInCompleteForms()));
+        //}
     }
 }
