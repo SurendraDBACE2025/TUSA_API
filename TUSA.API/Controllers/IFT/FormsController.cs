@@ -63,7 +63,7 @@ namespace TUSA.API.Controllers
         [HttpGet("GetUnAssignedformsBySupplier")]
         public IActionResult GetSupplierUnAssignedForms(int supplierId)
         {
-            return Ok(_mapper.Map<List<form_details_model>>(_service.GetSupplierUnAssignedForms(supplierId)));
+            return Ok(_mapper.Map<List<forms_master_model>>(_service.GetSupplierUnAssignedForms(supplierId)));
         }
         [HttpPost("AssignFormsToSupplier")]
         public IActionResult AssignFormsToSupplier(List<forms_assign_model_request> request)

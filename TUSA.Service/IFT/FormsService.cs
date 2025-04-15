@@ -16,8 +16,8 @@ namespace TUSA.Service
     {
         List<forms_master> GetFormsBasedoOnModule(int moduleId, string userId);
         List<form_details> GetFormsBasedoOnRole(string userId);
-        List<form_details> GetSupplierAssignedForms(int supplierId);
-        List<form_details> GetSupplierUnAssignedForms(int supplierId);
+        List<forms_master> GetSupplierAssignedForms(int supplierId);
+        List<forms_master> GetSupplierUnAssignedForms(int supplierId);
         List<form_details> GetInCompleteForms();
         List<form_details> GetAllFormDetails();
         IEnumerable<forms_master> GetForms();
@@ -98,32 +98,28 @@ namespace TUSA.Service
         {
             return _UOW.GetRepository<form_details>().Get().ToList();
         }
-        public List<form_details> GetSupplierAssignedForms(int supplierId)
+        public List<forms_master> GetSupplierAssignedForms(int supplierId)
         {
-            List<form_details> returnlist = new List<form_details>();
+            List<forms_master> returnlist = new List<forms_master>();
             List<group_form_access_metrix> forms = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == supplierId && x.is_active == "Yes").ToList();
-            // List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
-            List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
+            List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
+            // List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
             foreach (group_form_access_metrix form in forms)
             {
-
-                if (forms_details.Any(x => x.form_id == form.form_id))
-                    returnlist.Add(forms_details.Where(x => x.form_id == form.form_id).FirstOrDefault());
-
+                if (forms_List.Any(x => x.form_id == form.form_id))
+                    returnlist.Add(forms_List.Where(x => x.form_id == form.form_id).FirstOrDefault());
             }
             return returnlist;
-
         }
-        public List<form_details> GetSupplierUnAssignedForms(int supplierId)
+        public List<forms_master> GetSupplierUnAssignedForms(int supplierId)
         {
-            List<form_details> returnlist = new List<form_details>();
+            List<forms_master> returnlist = new List<forms_master>();
             List<group_form_access_metrix> forms = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == supplierId && x.is_active == "Yes").ToList();
-            // List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
-            List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
+            List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
+            // List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
 
-            foreach (form_details form in forms_details)
+            foreach (forms_master form in forms_List)
             {
-
                 if (!forms.Any(x => x.form_id == form.form_id))
                 {
                     //   form_details formdetls = forms_details.Where(x => x.form_id == form.form_id).FirstOrDefault();
@@ -131,7 +127,6 @@ namespace TUSA.Service
                 }
             }
             return returnlist;
-
         }
 
         public ApiResponce AssignFormsToSupplier(List<forms_assign_model_request> request)
