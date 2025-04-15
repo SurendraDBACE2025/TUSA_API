@@ -34,12 +34,12 @@ namespace TUSA.API.Controllers.Master
             return Ok(_mapper.Map<List<field_model>>(list));
         }
 
-        [Route("MapFieldsToiModule")]
+        [Route("MapFieldsToModule")]
         [HttpPost]
-        public IActionResult MapFieldsToiModule(FieldFormModuleMappingRequest request)
+        public IActionResult MapFieldsToModule(FieldFormModuleMappingRequest request)
         {
 
-            var response = _formFieldService.MapFieldsToiModule(request);
+            var response = _formFieldService.MapFieldsToModule(request);
             return Ok(response);
         }
     }

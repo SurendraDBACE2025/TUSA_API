@@ -235,16 +235,16 @@ namespace TUSA.Service
                     }
                 }
                 _UOW.SaveChanges();
-                foreach (group_form_access_metrix item in metrixs)
-                {
-                    if (!request.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
-                    {
-                        group_form_access_metrix fam = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).FirstOrDefault();
-                        //item.is_active = "No";
-                        _UOW.GetRepository<group_form_access_metrix>().Delete(fam);
-                    }
-                }
-                _UOW.SaveChanges();
+                //foreach (group_form_access_metrix item in metrixs)
+                //{
+                //    if (!request.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
+                //    {
+                //        group_form_access_metrix fam = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).FirstOrDefault();
+                //        //item.is_active = "No";
+                //        _UOW.GetRepository<group_form_access_metrix>().Delete(fam);
+                //    }
+                //}
+                //_UOW.SaveChanges();
             }
 
             catch (Exception Ex)

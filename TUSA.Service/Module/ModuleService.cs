@@ -25,6 +25,11 @@ namespace TUSA.Service
         {
             List<module_master> modules = new List<module_master>();
             user_group_metrix user_Group_Metrix = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == userId);
+            group_master group_Master = _UOW.GetRepository<group_master>().Single(g => g.group_id == user_Group_Metrix.group_Id);
+            if(group_Master.group_type_id == 1)
+            {
+                return _UOW.GetRepository<module_master>().GetAllList("module_name").ToList();
+            }
             List<group_form_access_metrix> forms = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == user_Group_Metrix.group_Id).ToList();
             foreach (group_form_access_metrix form in forms)
             {
