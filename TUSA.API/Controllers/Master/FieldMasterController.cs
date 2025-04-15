@@ -42,5 +42,15 @@ namespace TUSA.API.Controllers.Master
             var response = _formFieldService.MapFieldsToModule(request);
             return Ok(response);
         }
+
+        [Route("GetFieldsByForm")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetFieldsByForm(int form_id)
+        {
+
+            var list = _formFieldService.GetFieldsByForm(form_id);
+            return Ok(_mapper.Map<List<field_model>>(list));
+        }
     }
 }
