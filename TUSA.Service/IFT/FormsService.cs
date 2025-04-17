@@ -222,17 +222,30 @@ namespace TUSA.Service
             try
             {
                 List<group_form_access_metrix> metrixs = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == request[0].group_id && x.is_active == "yes").ToList();
+                
                 foreach (forms_assign_model_request item in request)
                 {
-                    if (!metrixs.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
+                    if (item.Action.Equals("Add"))
                     {
-                        _UOW.GetRepository<group_form_access_metrix>().Add(new group_form_access_metrix() { form_id = item.form_id, group_id = item.group_id, is_active = "Yes" });
+                        if (!metrixs.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
+                        {
+                            _UOW.GetRepository<group_form_access_metrix>().Add(new group_form_access_metrix() { form_id = item.form_id, group_id = item.group_id, is_active = "Yes" });
+                        }
+                    }
+                    else if(item.Action.Equals("Remove"))
+                    {
+                        if (request.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
+                        {
+                            group_form_access_metrix fam = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).FirstOrDefault();
+                            //item.is_active = "No";
+                            _UOW.GetRepository<group_form_access_metrix>().Delete(fam);
+                        }
                     }
                 }
                 _UOW.SaveChanges();
                 //foreach (group_form_access_metrix item in metrixs)
                 //{
-                //    if (!request.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
+                //    if (request.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
                 //    {
                 //        group_form_access_metrix fam = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).FirstOrDefault();
                 //        //item.is_active = "No";

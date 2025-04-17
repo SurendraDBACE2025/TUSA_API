@@ -28,6 +28,9 @@ namespace TUSA.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<form_field_metrix>().HasKey(c => new { c.module_id, c.form_name,c.field_id });
+            modelBuilder.Entity<group_form_access_metrix>()
+               .HasKey(e => new { e.form_id, e.group_id });
+            
             //modelBuilder.Entity<pdc_project_element_data>(builder =>{
             //                                            builder.HasNoKey();
             //                                            builder.ToTable("pdc_project_element_data");

@@ -91,7 +91,7 @@ namespace TUSA.Service.Mail
                 //mailMessage.Attachments.Last().ContentDisposition.FileName = fileName;
                 mailMessage.To.Add(user.email_Id);
                
-                await smtpClient.SendMailAsync(mailMessage);
+                //await smtpClient.SendMailAsync(mailMessage);
 
                 // updating mail status in database
                 try

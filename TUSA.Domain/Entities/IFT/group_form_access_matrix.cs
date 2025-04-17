@@ -14,6 +14,5 @@ namespace TUSA.Domain.Entities
         public int group_id { get; set; }
         [MaxLength(3)]
         public string is_active { get; set; }
-
     }
 }
