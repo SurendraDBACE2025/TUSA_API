@@ -20,6 +20,7 @@ namespace TUSA.Service
 
          pending_groups GetGroupDetails(string email_id);
         List<group_master> GetSupplier(string UserId);
+        ApiResponce<pending_groups> GetGroupDetailsByMailId(string email_id);
     }
    public class SupplierGroupService : BaseService<group_master>, ISupplierGroupService
     {
@@ -74,6 +75,10 @@ namespace TUSA.Service
                 user_Master.first_name = request.contact_First_Name;
                 user_Master.last_name = request.contact_Last_Name;
                 user_Master.password = EncryptUtl.MD5Encrypt(request.password);
+                user_Master.user_type.user_type_id = 1;
+                user_Master.is_activated = "1";
+                user_Master.is_active = "1";
+                user_Master.is_deleted = "0";
                 _UOW.GetRepository<user_master>().Add(user_Master);
                 _UOW.SaveChanges();
 
@@ -145,6 +150,24 @@ namespace TUSA.Service
             return new ApiResponce() { Status = true, Message = "", ErrorType = false };
            
 
+        }
+        public ApiResponce<pending_groups> GetGroupDetailsByMailId(string email_id)
+        {
+            try
+            {
+                pending_groups group = new pending_groups();
+
+                if (string.IsNullOrEmpty(email_id))
+                    return new ApiResponce<pending_groups>() { Status = false, Message = "No Email Id Provided", ErrorType = false, Result = null };
+
+                group = _UOW.GetRepository<pending_groups>().Get(x => x.email_Id == email_id).FirstOrDefault();
+
+                return new ApiResponce<pending_groups>() { Status = true, Message = "Group Details Fetched", ErrorType = false, Result = group };
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponce<pending_groups>() { Status = false, Message = "Error Encountered : " + ex.Message, ErrorType = false, Result = null };
+            }
         }
     }
 }

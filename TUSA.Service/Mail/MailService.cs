@@ -31,10 +31,11 @@ namespace TUSA.Service.Mail
         {
           
              //ToMail="harijonnalagadda@gmail.com";
-            var smtpClient = new SmtpClient("smtp.office365.com")
+            var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("support@triptychusa.com", "Tickets42me+U"),
+                // Credentials = new NetworkCredential("support@triptychusa.com", "Tickets42me+U"),
+                Credentials = new NetworkCredential("idbace@gmail.com", "Dbace$123"),
                 EnableSsl = true,
             };
             string FormLink = string.Format("http://localhost:4500/tusa/master-screens/supplier-registration?email_id=" + toMail);

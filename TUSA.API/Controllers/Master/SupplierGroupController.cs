@@ -55,6 +55,13 @@ namespace TUSA.API.Controllers.Master
             return Ok(responce);
         }
 
-      
+        [HttpPost("GetGroupDetailsByMailId")]
+        public IActionResult GetGroupDetailsByMailId(string email_id)
+        {
+            var responce = _service.GetGroupDetailsByMailId(email_id);
+            
+            return Ok(responce);
+        }
+
     }
 }
