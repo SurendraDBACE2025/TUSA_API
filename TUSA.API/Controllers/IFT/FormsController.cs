@@ -38,7 +38,7 @@ namespace TUSA.API.Controllers
         [HttpGet("GetFormsByRole")]
         public IActionResult GetFormsByRole()
         {
-            return Ok(_mapper.Map<List<form_details_model>>(_service.GetFormsBasedoOnRole( base.UserId)));
+            return Ok(_mapper.Map<List<forms_master_model>>(_service.GetFormsBasedoOnRole( base.UserId)));
         }
         [HttpGet("GetIncompleteForms")]
         public IActionResult GetIncompleteForms()

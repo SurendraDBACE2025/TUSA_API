@@ -64,9 +64,10 @@ namespace TUSA.Service
                         created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId),
                         modified_date = DateTime.Now,
                         modified_by = _applicationUser.UserId == "" ? "" : _applicationUser.UserId,
-                        is_active = "Yes"
+                        is_active = "Yes",
+                        module_id = request.module_id
                     }
-                    );
+                    ); 
 
                 _UOW.SaveChanges();                
 

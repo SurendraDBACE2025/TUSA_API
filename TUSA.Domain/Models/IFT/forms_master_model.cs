@@ -8,6 +8,8 @@ namespace TUSA.Domain.Models.IFT
         public module_master module { get; set; }
         public string form_name { get; set; }
         public string form_desc { get; set; }
-        public string is_active { get; set; }
+        public string is_active { get; set; }        
+        public string icon { get; set; }        
+        public string link { get; set; }
     }
 }

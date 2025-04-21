@@ -15,7 +15,7 @@ namespace TUSA.Service
     public interface IFormsService : IBaseService<forms_master>
     {
         List<forms_master> GetFormsBasedoOnModule(int moduleId, string userId);
-        List<form_details> GetFormsBasedoOnRole(string userId);
+        List<forms_master> GetFormsBasedoOnRole(string userId);
         List<forms_master> GetSupplierAssignedForms(int supplierId);
         List<forms_master> GetSupplierUnAssignedForms(int supplierId);
         List<form_details> GetInCompleteForms();
@@ -35,23 +35,28 @@ namespace TUSA.Service
         {
 
         }
-        public List<form_details> GetFormsBasedoOnRole(string userId)
+        public List<forms_master> GetFormsBasedoOnRole(string userId)
         {
-            List<form_details> returnlist = new List<form_details>();
+            // List<form_details> returnlist = new List<form_details>();
+            List<forms_master> returnlist = new List<forms_master>();
             user_group_metrix user_Group_Metrix = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == userId);
+            group_master group_Master = _UOW.GetRepository<group_master>().Single(g => g.group_id == user_Group_Metrix.group_Id);
             List<group_form_access_metrix> forms = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == user_Group_Metrix.group_Id).ToList();
-            // List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
-            List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
+            List<forms_master> forms_List = _UOW.GetRepository<forms_master>().Get().ToList();
+            // List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
             foreach (group_form_access_metrix form in forms)
             {
-                if (form.form_id == 7)
+                if (form.form_id == 0)
                 {
-                    returnlist.AddRange(forms_details);
+                    // returnlist.AddRange(forms_details);
+                    returnlist.AddRange(forms_List);
                 }
                 else
                 {
-                    if (forms_details.Any(x => x.form_id == form.form_id))
-                        returnlist.Add(forms_details.Single(x => x.form_id == form.form_id));
+                    //if (forms_details.Any(x => x.form_id == form.form_id))
+                    //    returnlist.Add(forms_details.Single(x => x.form_id == form.form_id));
+                    if (forms_List.Any(x => x.form_id == form.form_id && x.module_id < 4))
+                        returnlist.Add(forms_List.Single(x => x.form_id == form.form_id));
                 }
             }
             return returnlist;
@@ -134,10 +139,10 @@ namespace TUSA.Service
             if (request == null || (request != null && !request.Any()))
                 return new ApiResponce() { Status = false, Message = "No changes were made", ErrorType = false };
             try
-            {
-                List<group_form_access_metrix> metrixs = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == request[0].group_id && x.is_active == "yes").ToList();
+            {                
                 foreach (forms_assign_model_request item in request)
                 {
+                    List<group_form_access_metrix> metrixs = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).ToList();
                     if (item.Action.Equals("Add"))
                     {
                         if (!metrixs.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
@@ -169,19 +174,22 @@ namespace TUSA.Service
         }
         public List<form_details> GetMasterForms(string UserId)
         {
+            List<string> requiredModules = new List<string>() { "Master Forms", "Manage Suppliers" };           
             List<form_details> returnlist = new List<form_details>();
-            List<forms_master> forms = new List<forms_master>();// _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == 4).ToList();
-
+            List<module_master> module_Masters = _UOW.GetRepository<module_master>().Get(m => requiredModules.Contains(m.module_name)).ToList();
+            List<forms_master> forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == 4).ToList();            
             user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == UserId);
             group_master group = _UOW.GetRepository<group_master>().Single(x => x.group_id == ugm.group_Id);
+            List<group_form_access_metrix> group_Form_Access_Metrix = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == ugm.group_Id).ToList();
             List<group_type_master> gtmList = _UOW.GetRepository<group_type_master>().Get().ToList();
             if (gtmList.Any(x => x.group_type_id == group.group_type_id && x.group_type_name == "SUPPLIER"))
             {
-                forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == 4 && x.form_name== "User Registration").ToList();
+                forms = _UOW.GetRepository<forms_master>().Get(x => module_Masters.Select(mm => mm.module_id).ToList().Contains(x.module.module_id) && group_Form_Access_Metrix.Select(ga => ga.form_id).ToList().Contains(x.form_id)).ToList(); // && x.form_name== "User Registration").ToList();
             }
             else if (gtmList.Any(x => x.group_type_id == group.group_type_id && (x.group_type_name != "SUPPLIER")))// || x.group_type_name == "SUPPER ADMIN")))
             {
-                forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == 4).ToList();
+                int masterFormModuleId = module_Masters.Single(mm => mm.module_name.Equals("Master Forms")).module_id;
+                forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == masterFormModuleId).ToList();
             }
 
             List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
@@ -228,11 +236,11 @@ namespace TUSA.Service
                 return new ApiResponce() { Status = false, Message = "No changes were made", ErrorType = false };
 
             try
-            {
-                List<group_form_access_metrix> metrixs = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == request[0].group_id && x.is_active == "yes").ToList();
+            {               
                 
                 foreach (forms_assign_model_request item in request)
                 {
+                    List<group_form_access_metrix> metrixs = _UOW.GetRepository<group_form_access_metrix>().Get(x => x.group_id == item.group_id && x.form_id == item.form_id).ToList();
                     if (item.Action.Equals("Add"))
                     {
                         if (!metrixs.Any(x => x.form_id == item.form_id && x.group_id == item.group_id))
