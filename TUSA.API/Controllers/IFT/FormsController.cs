@@ -73,10 +73,9 @@ namespace TUSA.API.Controllers
         }
 
         [HttpGet("GetMasterForms")]
-        public IActionResult GetMasterForms()
-        { 
-            
-            return Ok(_mapper.Map<List<form_details_model>>(_service.GetMasterForms(base.UserId)));
+        public IActionResult GetMasterForms(string? menuItem = "")
+        {             
+            return Ok(_mapper.Map<List<forms_master_model>>(_service.GetMasterForms(base.UserId, menuItem)));
         }
 
         [HttpGet("GetAssignedSuppliersByForms")]

@@ -27,7 +27,7 @@ namespace TUSA.Service
         List<group_master> GetSupplierByForms(int formId);
         List<group_master> GetUnAssignedSupplierByForms(int formId);
         ApiResponce AssignSuppliersToForm(List<forms_assign_model_request> request);
-        List<form_details> GetMasterForms(string UserId);
+        List<forms_master> GetMasterForms(string UserId, string? menuItem);
     }
     public class FormsService : BaseService<forms_master>, IFormsService
     {
@@ -172,10 +172,10 @@ namespace TUSA.Service
             return new ApiResponce() { Status = true, Message = "", ErrorType = false };
 
         }
-        public List<form_details> GetMasterForms(string UserId)
+        public List<forms_master> GetMasterForms(string UserId, string? menuItem)
         {
             List<string> requiredModules = new List<string>() { "Master Forms", "Manage Suppliers" };           
-            List<form_details> returnlist = new List<form_details>();
+            List<forms_master> returnlist = new List<forms_master>();
             List<module_master> module_Masters = _UOW.GetRepository<module_master>().Get(m => requiredModules.Contains(m.module_name)).ToList();
             List<forms_master> forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == 4).ToList();            
             user_group_metrix ugm = _UOW.GetRepository<user_group_metrix>().Single(x => x.user_master_Id == UserId);
@@ -188,11 +188,13 @@ namespace TUSA.Service
             }
             else if (gtmList.Any(x => x.group_type_id == group.group_type_id && (x.group_type_name != "SUPPLIER")))// || x.group_type_name == "SUPPER ADMIN")))
             {
-                int masterFormModuleId = module_Masters.Single(mm => mm.module_name.Equals("Master Forms")).module_id;
-                forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == masterFormModuleId).ToList();
+                int requiredModuleId = (!string.IsNullOrEmpty(menuItem) && menuItem.ToUpper().Equals("MS")) ?
+                    module_Masters.Single(mm => mm.module_name.Equals("Manage Suppliers")).module_id
+                    : module_Masters.Single(mm => mm.module_name.Equals("Master Forms")).module_id;
+                forms = _UOW.GetRepository<forms_master>().Get(x => x.module.module_id == requiredModuleId).ToList();
             }
 
-            List<form_details> forms_details = _UOW.GetRepository<form_details>().Get().ToList();
+            List<forms_master> forms_details = _UOW.GetRepository<forms_master>().Get().ToList();
             foreach (forms_master form in forms)
             {
                 if (forms_details.Any(x => x.form_id == form.form_id))

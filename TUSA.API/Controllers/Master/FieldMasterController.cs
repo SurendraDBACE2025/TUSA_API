@@ -48,9 +48,13 @@ namespace TUSA.API.Controllers.Master
         [AllowAnonymous]
         public IActionResult GetFieldsByForm(int form_id)
         {
-
             var list = _formFieldService.GetFieldsByForm(form_id);
-            return Ok(_mapper.Map<List<field_model>>(list));
+            return Ok(new
+                            {
+                                FormName = _formFieldService.GetFormName(form_id),
+                                Fields = _mapper.Map<List<field_model>>(list)
+                            }
+               );
         }
     }
 }

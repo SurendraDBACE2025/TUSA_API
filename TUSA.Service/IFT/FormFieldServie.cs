@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using TUSA.Core;
 using TUSA.Data;
@@ -15,6 +16,7 @@ namespace TUSA.Service
         IEnumerable<field_master> GetFieldsByFormName(string formName);
         IEnumerable<field_master> GetAllFields();
         FieldFormModuleMappingResponse MapFieldsToModule(FieldFormModuleMappingRequest request);
+        string GetFormName(int formId);
     }
     public class FormFieldService : BaseService<field_master>, IFormFieldService
     {
@@ -29,13 +31,21 @@ namespace TUSA.Service
             return _UOW.GetRepository<field_master>().Get();
         }
         public IEnumerable<field_master> GetFieldsByForm(int formId)
-        { return _UOW.GetRepository<field_master>().Get(); }
+        {
+            var formName = _UOW.GetRepository<forms_master>().Single(f => f.form_id == formId).form_name;
+            List<form_field_metrix> form_Field_Metrix = _UOW.GetRepository<form_field_metrix>().Get(f => f.form_name == formName).ToList();
+            return _UOW.GetRepository<field_master>().Get(f => form_Field_Metrix.Select(f => f.field_id).ToList().Contains(f.field_id.ToString())); 
+        }
+        public string GetFormName(int formId)
+        {
+            return _UOW.GetRepository<forms_master>().Single(f => f.form_id == formId).form_name;            
+        }
         public IEnumerable<field_master> GetFieldsByFormName(string formName)
         { return _UOW.GetRepository<field_master>().Get(); }
 
         public IEnumerable<field_master> GetAllFields()
         {
-            return _UOW.GetRepository<field_master>().GetAllList("");
+            return _UOW.GetRepository<field_master>().Get(f => f.is_active == "Yes").ToList();
         }
         public FieldFormModuleMappingResponse MapFieldsToModule(FieldFormModuleMappingRequest request)
         {
@@ -65,7 +75,8 @@ namespace TUSA.Service
                         modified_date = DateTime.Now,
                         modified_by = _applicationUser.UserId == "" ? "" : _applicationUser.UserId,
                         is_active = "Yes",
-                        module_id = request.module_id
+                        module_id = request.module_id,
+                        link = string.Format("/tusa/master-screens/{0}", request.form_name.Replace(" ","").Replace("'",""))
                     }
                     ); 
 
