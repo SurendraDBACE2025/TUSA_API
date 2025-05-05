@@ -14,7 +14,7 @@ namespace TUSA.Service
     public interface IFormFieldService : IBaseService<field_master>
     {
         IEnumerable<field_master> GetFieldsByModule(int moduleId);
-        IEnumerable<field_master> GetFieldsByForm(int formId);
+        IEnumerable<fields_model> GetFieldsByForm(int formId);
         IEnumerable<field_master> GetFieldsByFormName(string formName);
         IEnumerable<form_subtitle_field_metrix> GetAllFields();
         FieldFormModuleMappingResponse MapFieldsToModule(FieldFormModuleMappingRequest request);
@@ -32,11 +32,38 @@ namespace TUSA.Service
         {
             return _UOW.GetRepository<field_master>().Get();
         }
-        public IEnumerable<field_master> GetFieldsByForm(int formId)
+        public IEnumerable<fields_model> GetFieldsByForm(int formId)
         {
-            var formName = _UOW.GetRepository<forms_master>().Single(f => f.form_id == formId).form_name;
-            List<form_field_metrix> form_Field_Metrix = _UOW.GetRepository<form_field_metrix>().Get(f => f.form_name == formName).ToList();
-            return _UOW.GetRepository<field_master>().Get(f => form_Field_Metrix.Select(f => f.field_id).ToList().Contains(f.field_id.ToString())); 
+            var lstFieldsForForm = new List<fields_model>();
+            try
+            {                
+                var formName = _UOW.GetRepository<forms_master>().Single(f => f.form_id == formId).form_name;
+                List<form_field_metrix> form_Field_Metrix = _UOW.GetRepository<form_field_metrix>().Get(f => f.form_name == formName, include: f => f.Include(x => x.subtitle)).ToList();
+                var all_fields = _UOW.GetRepository<field_master>().Get().ToList();
+                foreach(var formField in form_Field_Metrix)
+                {
+                    // f => form_Field_Metrix.Select(f => f.field_id).ToList().Contains(f.field_id.ToString())
+                    var field = all_fields.Single(f => f.field_id.ToString() == formField.field_id);
+                    lstFieldsForForm.Add(new fields_model() {
+                        field_id = field.field_id,
+                        field_title = field.field_title,
+                        field_data_type = field.field_data_type,
+                        field_length = field.field_length,
+                        is_dropdown = field.is_dropdown,
+                        reference_if_dropdown = field.reference_if_dropdown,
+                        ref_filed_name = field.ref_filed_name,
+                        is_active = field.is_active,
+                        form_subtitle_id = formField.form_subtitle_id,
+                        form_subtitle_name = formField.subtitle.subtitle_name,
+                        form_subtitle_Description = formField.subtitle.subtitle_desc
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return lstFieldsForForm;
         }
         public string GetFormName(int formId)
         {
@@ -95,13 +122,19 @@ namespace TUSA.Service
                 // Map the fields to the given module
                 foreach (var fieldItem in request.field_details)
                 {
-                    if (_UOW.GetRepository<form_field_metrix>().Single(ffm => ffm.form_name.ToUpper().Equals(request.form_name.ToUpper()) && ffm.field_id == fieldItem.field_id && ffm.module_id == request.module_id) != null) continue;
+                    if (_UOW.GetRepository<form_field_metrix>()
+                        .Single(ffm => 
+                                    ffm.form_name.ToUpper().Equals(request.form_name.ToUpper()) 
+                                    && ffm.field_id == fieldItem.field_id 
+                                    && ffm.module_id == request.module_id
+                                    && ffm.form_subtitle_id == fieldItem.form_subtitle_id) != null) continue;
                     _UOW.GetRepository<form_field_metrix>().Add(
                         new form_field_metrix()
                         {
                             form_name = request.form_name,
                             module_id = request.module_id,
                             field_id = fieldItem.field_id,
+                            form_subtitle_id = fieldItem.form_subtitle_id,
                             field_order = fieldItem.field_order,
                             created_date = DateTime.Now,
                             created_by = (_applicationUser.UserId == "" ? "" : _applicationUser.UserId),

@@ -52,7 +52,7 @@ namespace TUSA.API.Controllers.Master
             return Ok(new
                             {
                                 FormName = _formFieldService.GetFormName(form_id),
-                                Fields = _mapper.Map<List<field_model>>(list)
+                                Fields = list
                             }
                );
         }

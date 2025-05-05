@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ namespace TUSA.Domain.Entities
         public string form_name { get; set; }
         [Key]
         public string field_id { get; set; }
+        [ForeignKey("subtitle")]
         public int form_subtitle_id { get; set; }
+        public form_subtitle_master subtitle { get; set; }
         [MaxLength(3)]
         public string is_active { get; set; }
         [MaxLength(3)]
