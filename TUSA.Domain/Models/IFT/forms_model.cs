@@ -17,5 +17,6 @@ namespace TUSA.Domain.Models
         public string form_desc { get; set; }
         
         public string is_active { get; set; }
+        public int form_type_id { get; set; }
     }
 }

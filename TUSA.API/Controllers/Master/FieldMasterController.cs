@@ -31,7 +31,7 @@ namespace TUSA.API.Controllers.Master
         {
 
             var list = _formFieldService.GetAllFields();
-            return Ok(_mapper.Map<List<field_model>>(list));
+            return Ok(list);
         }
 
         [Route("MapFieldsToModule")]

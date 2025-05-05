@@ -30,6 +30,11 @@ namespace TUSA.API.Controllers
         {
             return Ok(_mapper.Map<List<forms_model>>(_service.GetForms()));
         }
+        [HttpGet("GetFormTypes")]
+        public IActionResult GetFormTypes()
+        {
+            return Ok(_mapper.Map<List<form_type_module>>(_service.GetFormTypes()));
+        }
         [HttpGet("GetFormsByModule")]
         public IActionResult GetFormsByModule(int moduleId)
         {

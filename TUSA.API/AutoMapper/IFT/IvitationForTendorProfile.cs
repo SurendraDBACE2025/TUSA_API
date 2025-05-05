@@ -18,6 +18,7 @@ namespace TUSA.API.AutoMapper
                  .ForMember(dest => dest.module_id, opt => opt.MapFrom(x => x.module.module_id));
             CreateMap<forms_model,forms_master>();
             CreateMap<form_details, form_details_model>();
+            CreateMap<form_type_master, form_type_module>();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace TUSA.Domain.Entities
         public string form_name { get; set; }
         [Key]
         public string field_id { get; set; }
+        public int form_subtitle_id { get; set; }
         [MaxLength(3)]
         public string is_active { get; set; }
         [MaxLength(3)]

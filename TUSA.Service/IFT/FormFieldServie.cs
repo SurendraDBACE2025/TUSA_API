@@ -6,6 +6,8 @@ using TUSA.Data;
 using TUSA.Domain.Entities;
 using TUSA.Domain.Models.IFT.Request;
 using TUSA.Domain.Models.IFT.Response;
+using TUSA.Domain.Models.master;
+using Microsoft.EntityFrameworkCore;
 
 namespace TUSA.Service
 {
@@ -14,7 +16,7 @@ namespace TUSA.Service
         IEnumerable<field_master> GetFieldsByModule(int moduleId);
         IEnumerable<field_master> GetFieldsByForm(int formId);
         IEnumerable<field_master> GetFieldsByFormName(string formName);
-        IEnumerable<field_master> GetAllFields();
+        IEnumerable<form_subtitle_field_metrix> GetAllFields();
         FieldFormModuleMappingResponse MapFieldsToModule(FieldFormModuleMappingRequest request);
         string GetFormName(int formId);
     }
@@ -43,9 +45,16 @@ namespace TUSA.Service
         public IEnumerable<field_master> GetFieldsByFormName(string formName)
         { return _UOW.GetRepository<field_master>().Get(); }
 
-        public IEnumerable<field_master> GetAllFields()
+        public IEnumerable<form_subtitle_field_metrix> GetAllFields()
         {
-            return _UOW.GetRepository<field_master>().Get(f => f.is_active == "Yes").ToList();
+            // List<fields_model> allFields = new List<fields_model>();
+            return _UOW.GetRepository<form_subtitle_field_metrix>()
+                //.Get(f => f.is_active == "Yes")                
+                .Get(f => f.is_active == "Yes",
+                include: x => x
+                .Include(x => x.field)
+                .Include(x=>x.subtitle))
+                .ToList();            
         }
         public FieldFormModuleMappingResponse MapFieldsToModule(FieldFormModuleMappingRequest request)
         {
@@ -68,6 +77,7 @@ namespace TUSA.Service
                 _UOW.GetRepository<forms_master>().Add(
                     new forms_master()
                     {
+                        form_type_id = request.form_type_id,
                         form_name = request.form_name,
                         form_desc = request.form_desc,
                         created_date = DateTime.Now,

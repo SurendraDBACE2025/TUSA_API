@@ -26,5 +26,6 @@ namespace TUSA.Domain.Entities
         public string icon { get; set; }
         [MaxLength(512)]
         public string link { get; set; }
+        public int? form_type_id { get; set; }
     }
 }

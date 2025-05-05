@@ -11,6 +11,7 @@ namespace TUSA.Domain.Models.IFT.Request
         public List<field_details> field_details { get; set; }
         public int module_id { get; set; }
         public int form_id { get; set; }
+        public int form_type_id { get; set; }
         public string form_name { get; set; }
         public string form_desc { get; set; }
     }
@@ -18,5 +19,6 @@ namespace TUSA.Domain.Models.IFT.Request
     {
         public string field_id { get; set; }
         public int field_order { get; set; }
+        public int form_subtitle_id { get; set; }
     }
 }

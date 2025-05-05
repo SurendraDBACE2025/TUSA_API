@@ -21,6 +21,7 @@ namespace TUSA.Service
         List<form_details> GetInCompleteForms();
         List<form_details> GetAllFormDetails();
         IEnumerable<forms_master> GetForms();
+        IEnumerable<form_type_master> GetFormTypes();
         forms_master GetFormsWithId(int formId);
         forms_master GetFormsWithformName(string formName);
         ApiResponce AssignFormsToSupplier(List<forms_assign_model_request> request);
@@ -78,6 +79,10 @@ namespace TUSA.Service
         {
             return _UOW.GetRepository<forms_master>().Get(
                 include: x => x.Include(x => x.module));
+        }
+        public IEnumerable<form_type_master> GetFormTypes()
+        {
+            return _UOW.GetRepository<form_type_master>().Get();
         }
         public forms_master GetFormsWithId(int formId)
         { return _UOW.GetRepository<forms_master>().Single(x => x.form_id == formId); }
